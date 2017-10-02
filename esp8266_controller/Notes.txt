@@ -1,0 +1,48 @@
+TODO:
+- calc system boundaries with anchor positions
+- check all TODOs
+- Maybe it's possible to change webSocket type only if it changes thorugh registrations like gondola on webserver. Good or not?
+- implement enable pin
+- implement state for SW LED
+- implement actions with button
+
+Possible tests:
+- Given rope length with different weights (as different angles. Maybe calc load factor)
+
+Ideas:
+- Use NTP for a time (maybe good for debug output, etc..). NTP is used here (https://github.com/Azure/azure-iot-arduino-protocol-http/blob/master/examples/simplesample_http/simplesample_http.ino)
+- Async WebServer (https://github.com/me-no-dev/ESPAsyncWebServer?utm_source=platformio&utm_medium=piohome)
+
+
+Hardware Ideas:
+- Reset (SW-)button to use default configuration (open AP...)
+- LCD to show Configuration or LEDs to show state
+- 8 LEDs to show LSB of IP address instead of LCD
+- 1 LED for established connection
+
+Out of code documentation:
+- Setup ATOM build environment
+- Add libraries (https://www.youtube.com/watch?v=EBlHNBNHESQ)
+- Fetcher checksum in EEPROM
+- compiler optiization -O3 for maxium speed. Size does not matter on this chip
+
+Unused libraries:
+- PubSubClient
+- AsyncMqttClient (https://github.com/marvinroger/async-mqtt-client)
+ - 11.09.2017: Client recieves multiple messages and crashes.
+- MqTT Server for ESP8266: https://github.com/FrancescoBaroneItaly/ME-MqTT-Server-for-ESP8266
+ - Necessary to install certain libraries. They will show up as errors while building :D
+ - Tutorial: http://bartech.mybluemix.net/2017/07/19/me-project-setup-mqtt-server-instance-on-esp8266/#more-828
+- async MqTT Client used in MQTTClientAsync: (https://github.com/marvinroger/async-mqtt-client)
+- use json? - JSON writer (https://github.com/maxpowel/ArduinoJsonWriter/blob/master/JsonWriter.cpp)
+ - Unnecessary overhead -> not used. Binary protocoll
+
+Used libraries:
+- WebSocket Server and Cient (https://github.com/Links2004/arduinoWebSockets?utm_source=platformio&utm_medium=piohome)
+ - Can use AsyncTCP with :https://github.com/me-no-dev/ESPAsyncTCP
+ - see in readme of https://github.com/Links2004/arduinoWebSockets?utm_source=platformio&utm_medium=piohome
+ - flag can be set in compiler (see platformio.ini)
+
+Usefull sources:
+- Linear regression: https://de.mathworks.com/help/matlab/data_analysis/linear-regression.html
+- TODO MATLAB source for polynomial reression
