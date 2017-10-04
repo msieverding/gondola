@@ -20,11 +20,13 @@ uint32_t RemoteAnchor::setTargetSpooledDistance(float targetDistance)
    * Just calculate how many step the ancor has todo, since gondola
    * needs the nubmer of steps to calculate smooth movement
    */
-  m_TargetSpooledDistance = targetDistance;
+  float distanceTodo = targetDistance - m_SpooledDistance;
+  distanceTodo = roundPrecision(distanceTodo, MIN_PRECISION);   // round to a given precision (1 step)
+  m_TargetSpooledDistance = m_SpooledDistance + distanceTodo;
 
-  float distanceTodo = abs(m_TargetSpooledDistance - m_SpooledDistance);
-  distanceTodo = roundPrecision(distanceTodo, MIN_PRECISION);   // round to a given precision
-
+  if (distanceTodo < 0)
+    distanceTodo = abs(distanceTodo);
+    
   logVerbose("===\nAnchor ID: %d on position: %s\n", m_ID, m_AnchorPosition.toString().c_str());
   logVerbose("Spooled: %scm, Delta: %scm\n", FTOS(m_SpooledDistance), FTOS(distanceTodo));
 
