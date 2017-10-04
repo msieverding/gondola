@@ -43,17 +43,20 @@
 #define EEPROM_GO_ANCHORPOS_START       314
 #define EEPROM_GO_ROPEOFFSET_START      326
 
+// WebSocketServer
+#define EEPROM_WSO_LOCALANCHOR_START    330
+
 // WebSocketClient
-#define EEPROM_WSO_HOST_START           330
+#define EEPROM_WSO_HOST_START           331
 #define EEPROM_WSO_HOST_LENGTH          20
 
 // Debug
-#define EEPROM_LOG_LEVEL_START          350
+#define EEPROM_LOG_LEVEL_START          351
 
 // Checksum
 #define EEPROM_CHECKSUM_DATA_BEGIN      0
-#define EEPROM_CHECKSUM_DATA_END        350
-#define EEPROM_CHECKSUM_START           351
+#define EEPROM_CHECKSUM_DATA_END        351
+#define EEPROM_CHECKSUM_START           352
 
 Config *Config::s_Instance = NULL;
 
@@ -92,7 +95,7 @@ Config::Config()
  // WebSocket
  , WSO_PORT(443)
  // WebSocketServer
- // - none yet
+ , WSO_LOCALANCHOR(true)
  // WebSocketClient
  , WSO_HOST("www.gondola.com")
  // Logging
@@ -388,6 +391,7 @@ void Config::printConfig(void)
   logDebug("GO_ROPEOFFSET       %s\n", FTOS(GO_ROPEOFFSET));
   // WebSocket
   logDebug("WSO_PORT:           %u\n", WSO_PORT);
+  logDebug("WSO_LOCALANCHOR:    %d\n", static_cast<uint8_t>(WSO_LOCALANCHOR));
   logDebug("WSO_HOST:           %s\n", WSO_HOST.c_str());
   logDebug("LOG_LEVEL:          %u\n", static_cast<uint8_t>(LOG_LEVEL));
 }
@@ -530,6 +534,10 @@ void Config::setWSO_PORT(uint16_t port)
   WSO_PORT = port;
 }
 // WebSocketServer
+void Config::setWSO_LOCALANCHOR(bool localAnchor)
+{
+  WSO_LOCALANCHOR = localAnchor;
+}
 
 // WebSocketClient
 void Config::setWSO_HOST(std::string host)

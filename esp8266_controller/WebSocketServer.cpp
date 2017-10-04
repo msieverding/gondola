@@ -4,6 +4,7 @@
 #include "RemoteAnchor.hpp"
 #include "HardwareAnchor.hpp"
 #include "ConnectionMgr.hpp"
+#include "ApplicationInterface.hpp"
 
 WebSocketServer::WebSocketServer(uint16_t port)
  : m_Port(port)
@@ -19,15 +20,18 @@ WebSocketServer::WebSocketServer(uint16_t port)
   m_WebSocketServer.begin();
   m_WebSocketServer.onEvent(std::bind(&WebSocketServer::webSocketEvent, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
 
-  m_Anchor.registerReadyCallback(std::bind(&WebSocketServer::readyCallbackToGondola, this, std::placeholders::_1));
-  m_Gondola.addAnchor(&m_Anchor);
+  if (Config::get()->getWSO_LOCALANCHOR())
+  {
+    m_Anchor.registerReadyCallback(std::bind(&WebSocketServer::readyCallbackToGondola, this, std::placeholders::_1));
+    m_Gondola.addAnchor(&m_Anchor);
+  }
 
-  ConnectionMgr::get()->getWebServer().registerGondola(&m_Gondola);
+  ApplicationInterface::get()->registerGondola(&m_Gondola);
 }
 
 WebSocketServer::~WebSocketServer()
 {
-  ConnectionMgr::get()->getWebServer().registerGondola(NULL);
+  ApplicationInterface::get()->registerGondola(NULL);
 }
 
 void WebSocketServer::loop()

@@ -148,6 +148,8 @@ public:
   void setWSO_PORT(uint16_t port);
 
   // WebSocketServer
+  bool getWSO_LOCALANCHOR() { return WSO_LOCALANCHOR; }
+  void setWSO_LOCALANCHOR(bool localAnchor);
 
   // WebSocketClient
   std::string getWSO_HOST() { return WSO_HOST; }
@@ -266,6 +268,7 @@ private:
   uint16_t WSO_PORT;
 
   // WebSocketServer
+  bool WSO_LOCALANCHOR;
 
   // WebSocketClient
   std::string WSO_HOST;

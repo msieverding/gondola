@@ -2,6 +2,7 @@
 #include "Coordinate.hpp"
 #include "ConnectionMgr.hpp"
 #include "Log.hpp"
+#include "ApplicationInterface.hpp"
 #include <string>
 #include <functional>
 
@@ -37,11 +38,6 @@ void WebServer::loop()
   m_Server.handleClient();
 }
 
-void WebServer::registerGondola(Gondola *gondola)
-{
-  m_Gondola = gondola;
-}
-
 void WebServer::handleRoot()
 {
   std::string answer;
@@ -63,8 +59,9 @@ void WebServer::handleRoot()
       if(m_Server.arg("speed").length())
         speed = m_Server.arg("speed").toFloat();
 
-      if (m_Gondola)
-        m_Gondola->setTargetPosition(newCoordinate, speed);
+      Gondola *gondola = ApplicationInterface::get()->getGondola();
+      if (gondola)
+        gondola->setTargetPosition(newCoordinate, speed);
     }
     prepareGondolaMovePage(answer);
   }
@@ -197,6 +194,15 @@ void WebServer::handleSetupSystem()
     conMgr->changeWebSocket(WEBSOCKET_NONE);
   }
 
+  if (m_Server.arg("WSO_LOCALANCHOR").equals("YES"))
+  {
+    Config::get()->setWSO_LOCALANCHOR(true);
+  }
+  else
+  {
+    Config::get()->setWSO_LOCALANCHOR(false);
+  }
+  
   config->writeToEEPROM();
 
   prepareHeader(answer);
@@ -364,6 +370,9 @@ void WebServer::prepareSetupSystemPage(std::string &s)
   s.append("<input type=\"radio\" id=\"N\" name=\"CM_WEBSOCKETTYPE\" value=\"WEBSOCKET_NONE\" " + std::string(config->getCM_WEBSOCKETTYPE() == WEBSOCKET_NONE ? "checked" : "") + ">");
   s.append("<label for=\"N\">None</label><br>");
 
+  s.append("<input type=\"checkbox\" id=\"A\" name=\"GO_LOCALANCHOR\" value=\"Y\" " + std::string(config->getWSO_LOCALANCHOR() == true ? "checked" : "") + ">");
+  s.append("<label for=\"A\">Server has local Anchor</label><br>");
+
   // Host for WebSocket Connection
   s.append("<h4>WebSocket host (if client)</h4>");
   s.append("<label for=\"WSO_HOST\">URL/IP: </label>");
@@ -397,21 +406,19 @@ void WebServer::prepareSetupSystemPage(std::string &s)
 
 void WebServer::prepareGondolaMovePage(std::string &s)
 {
-  if (m_Gondola == NULL)
-    return;
+  Gondola *gondola = ApplicationInterface::get()->getGondola();
+  Coordinate coord = gondola->getCurrentPosition();
 
-  Coordinate coord = m_Gondola->getCurrentPosition();
-
-  if (m_Gondola->getCurrentPosition() != m_Gondola->getTargetPosition())
+  if (gondola->getCurrentPosition() != gondola->getTargetPosition())
   {
-    uint32_t travelTime = static_cast<uint32_t>(m_Gondola->getTravelTime() + 1);    // round to next int
+    uint32_t travelTime = static_cast<uint32_t>(gondola->getTravelTime() + 1);    // round to next int
     if (travelTime == 0)
       travelTime = 1000;
     String travelTimeStr((travelTime + 1000) / 1000);                               // round to next second
     s.append("<head><meta http-equiv=\"Refresh\" content=\"" + std::string(travelTimeStr.c_str()) + "; URL=/\"></head>");
     s.append("<h1>Gondola is moving</h1>");
-    s.append("Move from: " + m_Gondola->getCurrentPosition().toString());
-    s.append("<br>to: " + m_Gondola->getTargetPosition().toString());
+    s.append("Move from: " + gondola->getCurrentPosition().toString());
+    s.append("<br>to: " + gondola->getTargetPosition().toString());
   }
   else
   {
@@ -434,7 +441,7 @@ void WebServer::prepareGondolaMovePage(std::string &s)
     s.append("<button type=\"submit\">Move!</button>");
     s.append("</form><br>");
   }
-  std::list<IAnchor *> anchorList = m_Gondola->getAnchorList();
+  std::list<IAnchor *> anchorList = gondola->getAnchorList();
   std::list<IAnchor *>::iterator it = anchorList.begin();
   s.append("<h4>Registered anchors:</h4>");
   while(it != anchorList.end())
