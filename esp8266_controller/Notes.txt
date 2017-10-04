@@ -1,10 +1,10 @@
 TODO:
-- calc system boundaries with anchor positions
+- calc system boundaries with anchor positions and check them before movement
 - check all TODOs
-- Maybe it's possible to change webSocket type only if it changes thorugh registrations like gondola on webserver. Good or not?
-- implement enable pin
+- Find problems with dual connection
 - implement state for SW LED
 - implement actions with button
+- setup system shouldn't open a new socket, we´hen the type doesn't change. Only send a message with new info
 
 Possible tests:
 - Given rope length with different weights (as different angles. Maybe calc load factor)

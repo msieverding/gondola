@@ -93,12 +93,12 @@ void WebSocketClient::webSocketEvent(WStype_t type, uint8_t * payload, size_t le
 		}
 
 		case WStype_TEXT:
-			logDebug("[WSc] get text: %s\n", payload);
+			// logDebug("[WSc] get text: %s\n", payload);
 			break;
 
 		case WStype_BIN:
     {
-			logDebug("[WSc] get binary length: %u\n", length);
+			// logDebug("[WSc] get binary length: %u\n", length);
 
       webSocketCommand_t cmd = static_cast<webSocketCommand_t>(payload[0]);
 

@@ -25,18 +25,15 @@ uint32_t RemoteAnchor::setTargetSpooledDistance(float targetDistance)
   float distanceTodo = abs(m_TargetSpooledDistance - m_SpooledDistance);
   distanceTodo = roundPrecision(distanceTodo, MIN_PRECISION);   // round to a given precision
 
-  logVerbose("============ Anchor Computing stuff ==================\n");
-  logVerbose("Anchor ID: %d on position: %s\n", m_ID, m_AnchorPosition.toString().c_str());
+  logVerbose("===\nAnchor ID: %d on position: %s\n", m_ID, m_AnchorPosition.toString().c_str());
   logVerbose("Spooled: %scm, Delta: %scm\n", FTOS(m_SpooledDistance), FTOS(distanceTodo));
 
   // calculate number of steps todo
   uint32_t stepsTodo = distanceTodo * STEP_CM;
 
-  logVerbose("Rounded to: (%scm): %scm, steps: %ld, microsteps: %ld\n", floatToString(MIN_PRECISION).c_str(), floatToString(distanceTodo).c_str(), stepsTodo, stepsTodo * MICROSTEPS);
+  logVerbose("Rounded to: (%scm): %scm, steps: %ld, microsteps: %ld\n===\n", floatToString(MIN_PRECISION).c_str(), floatToString(distanceTodo).c_str(), stepsTodo, stepsTodo * MICROSTEPS);
 
   stepsTodo *= MICROSTEPS; // we need to account for all microsteps
-
-  logVerbose("======================================================\n");
 
   return stepsTodo;
 }
@@ -66,7 +63,6 @@ bool RemoteAnchor::executeMoveCallback()
 
 bool RemoteAnchor::executeReadyCallback()
 {
-  logDebug("RemoteAnchor::executeReadyCallback\n");
   m_SpooledDistance = m_TargetSpooledDistance;
   if (m_ReadyCallback)
     return m_ReadyCallback(this);

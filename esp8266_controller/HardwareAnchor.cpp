@@ -29,8 +29,7 @@ uint32_t HardwareAnchor::setTargetSpooledDistance(float targetDistance)
   distanceTodo = roundPrecision(distanceTodo, MIN_PRECISION);   // round to a given precision (1 step)
   m_TargetSpooledDistance = m_SpooledDistance + distanceTodo;
 
-  logVerbose("============ Anchor Computing stuff ==================\n");
-  logVerbose("Anchor ID: %d on position: %s\n", m_ID, m_AnchorPosition.toString().c_str());
+  logVerbose("===\nAnchor ID: %d on position: %s\n", m_ID, m_AnchorPosition.toString().c_str());
   logVerbose("Spooled: %scm, Delta: %scm\n", FTOS(m_SpooledDistance), FTOS(distanceTodo));
 
   if (distanceTodo < 0)
@@ -47,12 +46,10 @@ uint32_t HardwareAnchor::setTargetSpooledDistance(float targetDistance)
   // calculate number of steps todo
   m_StepsTodo = distanceTodo * STEP_CM;
 
-  logVerbose("Rounded to: (%scm): %scm, steps: %ld, microsteps: %ld\n", floatToString(MIN_PRECISION).c_str(), floatToString(distanceTodo).c_str(), m_StepsTodo, m_StepsTodo * MICROSTEPS);
+  logVerbose("Rounded to: (%scm): %scm, steps: %ld, microsteps: %ld\n===\n", floatToString(MIN_PRECISION).c_str(), floatToString(distanceTodo).c_str(), m_StepsTodo, m_StepsTodo * MICROSTEPS);
 
   m_StepsTodo *= MICROSTEPS; // we need to account for all microsteps
   m_StepsDone = 0;
-
-  logVerbose("======================================================\n");
 
   return m_StepsTodo;
 }

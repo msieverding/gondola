@@ -40,7 +40,7 @@ public:
 
 private:
   /**
-   * Event that is trigered on incomming message
+   * Event that is trigered on incoming message
    * @param num     Client number
    * @param type    type of data
    * @param payload message content

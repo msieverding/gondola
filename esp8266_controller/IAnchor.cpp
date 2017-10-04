@@ -23,7 +23,7 @@ bool IAnchor::setInitialSpooledDistance(float spooledDistance)
 {
   m_SpooledDistance = spooledDistance;
   m_TargetSpooledDistance = m_SpooledDistance;
-  logDebug("Anchor '%d': Incoming initial spooling '%s'.\n", getID(), FTOS(m_SpooledDistance));
+  // logDebug("Anchor '%d': Incoming initial spooling '%s'.\n", getID(), FTOS(m_SpooledDistance));
   return executeInitCallback();
 }
 
@@ -56,7 +56,6 @@ void IAnchor::registerReadyCallback(callback cb)
 
 bool IAnchor::executeReadyCallback()
 {
-  logDebug("IAnchor::executeReadyCallback\n");
   if (m_ReadyCallback)
     return m_ReadyCallback(this);
   return true;

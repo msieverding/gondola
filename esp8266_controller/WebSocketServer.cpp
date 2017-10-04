@@ -89,12 +89,12 @@ void WebSocketServer::webSocketEvent(uint8_t num, WStype_t type, uint8_t *payloa
     break;
 
   case WStype_TEXT:
-    logDebug("[%u] get Text: %s\n", num, payload);
+    // logDebug("[%u] get Text: %s\n", num, payload);
     break;
 
   case WStype_BIN:
   {
-    logDebug("[%u] get binary length: %u\n", num, length);
+    // logDebug("[%u] get binary length: %u\n", num, length);
 
     webSocketCommand_t cmd = static_cast<webSocketCommand_t>(payload[0]);
     if (cmd == WSO_C_REGISTER)
@@ -190,7 +190,6 @@ bool WebSocketServer::remoteAnchorInitFunction(IAnchor *anchor)
 
 bool WebSocketServer::readyCallbackToGondola(IAnchor *anchor)
 {
-  logDebug("readyCallbackToGondola\n");
   m_Gondola.reportAnchorFinished(anchor->getID());
   return true;
 }
