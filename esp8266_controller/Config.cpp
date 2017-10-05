@@ -135,6 +135,7 @@ bool Config::writeToEEPROM()
   writeGOToEEPROM(false);
 
   persistString(WSO_HOST, EEPROM_WSO_HOST_START, EEPROM_WSO_HOST_LENGTH);
+  EEPROM.write(EEPROM_WSO_LOCALANCHOR_START, static_cast<uint8_t>(WSO_LOCALANCHOR));
 
   EEPROM.write(EEPROM_LOG_LEVEL_START, static_cast<uint8_t>(LOG_LEVEL));
 
@@ -240,6 +241,7 @@ void Config::readFromEEPROM()
   readFloat(     GO_ROPEOFFSET,    EEPROM_GO_ROPEOFFSET_START);
 
   readString(    WSO_HOST,         EEPROM_WSO_HOST_START,        EEPROM_WSO_HOST_LENGTH);
+  WSO_LOCALANCHOR = static_cast<bool>(EEPROM.read(EEPROM_WSO_LOCALANCHOR_START));
 
   LOG_LEVEL = static_cast<logLevel_t>(EEPROM.read(EEPROM_LOG_LEVEL_START));
 

@@ -39,7 +39,6 @@ void WebSocketServer::loop()
   // Ping all clients to detect timeouts. See issue: https://github.com/Links2004/arduinoWebSockets/issues/203
   if (millis() > m_NextPing)
   {
-    m_NextPing += 1000;
     std::list<IAnchor *> anchorList = m_Gondola.getAnchorList();
     std::list<IAnchor *>::iterator it = anchorList.begin();
     while (it != anchorList.end())
@@ -61,6 +60,7 @@ void WebSocketServer::loop()
       }
       it++;
     }
+    m_NextPing = millis() + 1000;
   }
 
 #if (WEBSOCKETS_NETWORK_TYPE != NETWORK_ESP8266_ASYNC)

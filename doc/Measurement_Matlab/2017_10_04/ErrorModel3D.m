@@ -3,9 +3,9 @@ close all;
 
 dpos = 20;          % error in mm (+)
 dneg = 20;          % error in mm (-)
-r1 = 3000;           % length of rope 1
+r1 = 4000;           % length of rope 1
 r2 = 3000;          % length of rope 2
-r3 = 4000;
+r3 = 3000;
 % only used for formulas
 Anchor1YOffset = 3236;
 Anchor2YOffset = 1234;
@@ -70,7 +70,7 @@ legend("target position", "edges of defective position", 'Location' ,'best');
 
 
 %% Plot points inside
-gridintensity = 1;
+gridintensity = 0.5;
 r1d = linspace(r1-dneg, r1+dpos, (dneg + dpos + 1)*gridintensity)';
 r2d = linspace(r2-dneg, r2+dpos, (dneg + dpos + 1)*gridintensity)';
 r3d = linspace(r3-dneg, r3+dpos, (dneg + dpos + 1)*gridintensity)';
@@ -83,9 +83,10 @@ z_all = (r2d.^2 - r3d.^2 + 4004 * y_all + 50294869) / 15394;
 x_all = sqrt(-(r3d.^2 - (y_all-1234).^2 - (z_all-7697).^2));
 x_all = real(x_all); 
 figure;
-scatter3(y_all(:), x_all(:), z_all(:), 'k.');
+plot3(y_real, x_real, z_real, 'gx');
 hold on;
 plot3(y(idx), x(idx), z(idx), 'r');
+scatter3(y_all(:), x_all(:), z_all(:), 'k.');
 title("3D error with given 1D error (grid)");
 grid on;
 axis on;
@@ -93,7 +94,7 @@ set(gca,'YDir','reverse');      % reverse direction of y axis
 xlabel("Y [mm]");
 ylabel("X [mm]");
 zlabel("Z [mm]");
-legend("target position", "points of defective position", 'Location' ,'best');
+legend("target position", "edges of defective position", "points of defective position", 'Location' ,'best');
 
 %% Maximum error per dimension
 x_err_max = max(x_all) - x_real;

@@ -21,6 +21,7 @@ typedef union b4Converter_u {
   float f;        //!< float
   uint8_t b[4];   //!< bytewise array
   uint32_t u;     //!< uint32_t
+  int32_t i;      //!< int32_t
 } b4Converter_t;
 
 /**

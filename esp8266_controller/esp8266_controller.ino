@@ -10,7 +10,14 @@
 #include "ConnectionMgr.hpp"
 #include "Log.hpp"
 
+#include "ApplicationRSSIMeasServer.hpp"
+#include "ApplicationRSSIMeasClient.hpp"
+
+
 IConnection *serial;
+
+ApplicationRSSIMeasServer *RSSIServer;
+ApplicationRSSIMeasClient *RSSIClient;
 
 void setup()
 {
@@ -25,6 +32,9 @@ void setup()
 
   wdt_enable(1000);
   // ESP.wdtEnable(1000);
+
+  // RSSIServer = new ApplicationRSSIMeasServer(440);
+  RSSIClient = new ApplicationRSSIMeasClient(Config::get()->getWSO_HOST(), 440);
 }
 
 void loop()
@@ -35,4 +45,10 @@ void loop()
   ConnectionMgr::get()->loop();
   if (serial)
     serial->loop();
+
+  if (RSSIServer)
+    RSSIServer->loop();
+
+  if (RSSIClient)
+    RSSIClient->loop();
 }

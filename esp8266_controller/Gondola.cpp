@@ -128,7 +128,7 @@ void Gondola::setTargetPosition(Coordinate &targetPos, float &speed)
   }
 
   float travelTime = travelDistance / speed;
-  logVerbose("===\nTravelDistance: %s, TravelTime: %s\n", FTOS(travelDistance), FTOS(travelTime));
+  logVerbose("\nTravelDistance: %s, TravelTime: %s\n", FTOS(travelDistance), FTOS(travelTime));
   uint32_t maxSteps = 0;
 
   // prepare to spool
@@ -147,7 +147,7 @@ void Gondola::setTargetPosition(Coordinate &targetPos, float &speed)
   }
 
   // TODO change value of 1000.0f to a realistic one
-  logVerbose("Budget: %ss, Minimum %ss\n===\n", FTOS(travelTime), FTOS(maxSteps / 1000.0f));
+  logVerbose("Budget: %ss, Minimum %ss\n\n", FTOS(travelTime), FTOS(maxSteps / 1000.0f));
 
   travelTime = std::max(travelTime, maxSteps / 1000.0f);
   travelTime *= 1000;

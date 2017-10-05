@@ -108,22 +108,22 @@ void WebServer::handleSetupWiFi()
     config->setAP_NETMASK(m_Server.arg("AP_NETMASK"));
 
 
-  if (m_Server.arg("WiFiType").equals("CON_ACCESS_POINT"))
+  if (m_Server.arg("CM_CONNECTIONTYPE").equals("CON_ACCESS_POINT"))
   {
     conMgr->requestChangeConnection(CON_ACCESS_POINT);
     config->setCM_CONNECTIONTYPE(CON_ACCESS_POINT);
   }
-  else if (m_Server.arg("WiFiType").equals("CON_WIFI_CONNECTION"))
+  else if (m_Server.arg("CM_CONNECTIONTYPE").equals("CON_WIFI_CONNECTION"))
   {
     conMgr->requestChangeConnection(CON_WIFI_CONNECTION);
     config->setCM_CONNECTIONTYPE(CON_WIFI_CONNECTION);
   }
-  else if (m_Server.arg("WiFiType").equals("CON_DUAL_CONNECTION"))
+  else if (m_Server.arg("CM_CONNECTIONTYPE").equals("CON_DUAL_CONNECTION"))
   {
     conMgr->requestChangeConnection(CON_DUAL_CONNECTION);
     config->setCM_CONNECTIONTYPE(CON_DUAL_CONNECTION);
   }
-  else if (m_Server.arg("WiFiType").equals("CON_RESTORE_DEFAULT"))
+  else if (m_Server.arg("CM_CONNECTIONTYPE").equals("CON_RESTORE_DEFAULT"))
   {
     Config::get()->resetConfig();
     config = Config::get();
@@ -194,15 +194,20 @@ void WebServer::handleSetupSystem()
     conMgr->changeWebSocket(WEBSOCKET_NONE);
   }
 
-  if (m_Server.arg("WSO_LOCALANCHOR").equals("YES"))
+  if (m_Server.arg("WSO_LOCALANCHOR").length())
   {
-    Config::get()->setWSO_LOCALANCHOR(true);
+    if (m_Server.arg("WSO_LOCALANCHOR").equals("YES"))
+    {
+      Config::get()->setWSO_LOCALANCHOR(true);
+      logDebug("set WSO_LOCALANCHOR");
+    }
+    else
+    {
+      Config::get()->setWSO_LOCALANCHOR(false);
+      logDebug("unset WSO_LOCALANCHOR");
+    }
   }
-  else
-  {
-    Config::get()->setWSO_LOCALANCHOR(false);
-  }
-  
+
   config->writeToEEPROM();
 
   prepareHeader(answer);
@@ -337,13 +342,13 @@ void WebServer::prepareSetupWiFiPage(std::string &s)
 
   // WiFi Type
   s.append("<h4>Select WiFi Type</h4>");
-  s.append("<input type=\"radio\" id=\"WC\" name=\"WiFiType\" value=\"CON_WIFI_CONNECTION\" " + std::string(config->getCM_CONNECTIONTYPE() == CON_WIFI_CONNECTION ? "checked" : "") + ">");
+  s.append("<input type=\"radio\" id=\"WC\" name=\"CM_CONNECTIONTYPE\" value=\"CON_WIFI_CONNECTION\" " + std::string(config->getCM_CONNECTIONTYPE() == CON_WIFI_CONNECTION ? "checked" : "") + ">");
   s.append("<label for=\"WC\">WiFi Connection</label><br>");
-  s.append("<input type=\"radio\" id=\"AP\" name=\"WiFiType\" value=\"CON_ACCESS_POINT\" " + std::string(config->getCM_CONNECTIONTYPE() == CON_ACCESS_POINT ? "checked" : "") + ">");
+  s.append("<input type=\"radio\" id=\"AP\" name=\"CM_CONNECTIONTYPE\" value=\"CON_ACCESS_POINT\" " + std::string(config->getCM_CONNECTIONTYPE() == CON_ACCESS_POINT ? "checked" : "") + ">");
   s.append("<label for=\"AP\">Access Point</label><br>");
-  s.append("<input type=\"radio\" id=\"DU\" name=\"WiFiType\" value=\"CON_DUAL_CONNECTION\" " + std::string(config->getCM_CONNECTIONTYPE() == CON_DUAL_CONNECTION ? "checked" : "") + ">");
+  s.append("<input type=\"radio\" id=\"DU\" name=\"CM_CONNECTIONTYPE\" value=\"CON_DUAL_CONNECTION\" " + std::string(config->getCM_CONNECTIONTYPE() == CON_DUAL_CONNECTION ? "checked" : "") + ">");
   s.append("<label for=\"DU\">WiFi + AP Connection.</label><br>");
-  s.append("<input type=\"radio\" id=\"DE\" name=\"WiFiType\" value=\"CON_RESTORE_DEFAULT\">");
+  s.append("<input type=\"radio\" id=\"DE\" name=\"CM_CONNECTIONTYPE\" value=\"CON_RESTORE_DEFAULT\">");
   s.append("<label for=\"DE\">Back to Default</label><br>");
 
   // Submit
@@ -370,9 +375,6 @@ void WebServer::prepareSetupSystemPage(std::string &s)
   s.append("<input type=\"radio\" id=\"N\" name=\"CM_WEBSOCKETTYPE\" value=\"WEBSOCKET_NONE\" " + std::string(config->getCM_WEBSOCKETTYPE() == WEBSOCKET_NONE ? "checked" : "") + ">");
   s.append("<label for=\"N\">None</label><br>");
 
-  s.append("<input type=\"checkbox\" id=\"A\" name=\"GO_LOCALANCHOR\" value=\"Y\" " + std::string(config->getWSO_LOCALANCHOR() == true ? "checked" : "") + ">");
-  s.append("<label for=\"A\">Server has local Anchor</label><br>");
-
   // Host for WebSocket Connection
   s.append("<h4>WebSocket host (if client)</h4>");
   s.append("<label for=\"WSO_HOST\">URL/IP: </label>");
@@ -386,6 +388,13 @@ void WebServer::prepareSetupSystemPage(std::string &s)
   s.append("<input type=\"text\" id=\"GO_POSITION_Y\" name=\"GO_POSITION_Y\" value=\"" + floatToString(Config::get()->getGO_POSITION().y) + "\"><br><br>");
   s.append("<label for=\"GO_POSITION_Z\">Z (cm): </label>");
   s.append("<input type=\"text\" id=\"GO_POSITION_Z\" name=\"GO_POSITION_Z\" value=\"" + floatToString(Config::get()->getGO_POSITION().z) + "\"><br><br>");
+
+  // Local anchor
+  s.append("<h4>Server has local anchor (if master)</h4>");
+  s.append("<input type=\"radio\" id=\"Y\" name=\"WSO_LOCALANCHOR\" value=\"YES\" " + std::string(config->getWSO_LOCALANCHOR() == true ? "checked" : "") + ">");
+  s.append("<label for=\"Y\">Yes</label><br>");
+  s.append("<input type=\"radio\" id=\"N\" name=\"WSO_LOCALANCHOR\" value=\"NO\" " + std::string(config->getWSO_LOCALANCHOR() == false ? "checked" : "") + ">");
+  s.append("<label for=\"N\">No</label><br>");
 
   // Mounting position of anchor
   s.append("<h4>Mounting position of anchor</h4>");

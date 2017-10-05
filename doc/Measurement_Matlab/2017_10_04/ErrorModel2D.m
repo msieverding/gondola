@@ -35,7 +35,7 @@ ylabel("X [mm]");
 plot(y_real, x_real, 'gx');
 plot([y; y(1)], [x; x(1)], 'r--'); % Add first point to the end, to draw last line of polygon
 plot(y_all, x_all, 'k.');
-legend("target position", "edges of defective position", 'Location' ,'best');
+legend("target position", "edges of defective position", "grid of defective position", 'Location' ,'best');
 
 %% Maximum error per dimension
 x_err_max = max(x_all) - x_real;

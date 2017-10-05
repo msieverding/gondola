@@ -24,4 +24,4 @@ private:
   static ApplicationInterface       *s_Instance;
   Gondola                           *m_Gondola;
 };
-#endif
+#endif /* _APPLICATION_INTERFACE_HPP_ */

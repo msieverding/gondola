@@ -65,3 +65,5 @@ line([min(alpha) max(alpha)], [100 100], 'Color', 'k');
 xlabel("angle [°]");
 ylabel("Load factor [%]");
 legend("Percent of original load", "100 per cent line", 'Location' ,'best');
+
+
