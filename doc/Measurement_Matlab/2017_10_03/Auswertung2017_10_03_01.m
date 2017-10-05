@@ -74,7 +74,7 @@ plot(Measurement, InputLength3);
 title("Input length of the ropes");
 xlabel("Measurement");
 ylabel("Length of rope [mm]");
-legend("Motor1", "Motor2", "Motor3");
+legend("Motor1", "Motor2", "Motor3", 'Location' ,'best');
 
 % Vector between measurement and anchor Position
 Dist1Meas = Meas - AnchorPos1;
@@ -95,7 +95,7 @@ plot(Measurement, OutputLength3);
 title("Measured Length of the ropes");
 xlabel("Measurement");
 ylabel("Length of rope [mm]");
-legend("Motor1", "Motor2", "Motor3");
+legend("Motor1", "Motor2", "Motor3", 'Location' ,'best');
 
 % Error in spooling of the motors
 ErrLength1 = OutputLength1 - InputLength1;
@@ -111,5 +111,5 @@ plot(Measurement, ErrLength3);
 title("Error in spoolng");
 xlabel("Measurement");
 ylabel("Error [mm]");
-legend("Motor1", "Motor2", "Motor3");
+legend("Motor1", "Motor2", "Motor3", 'Location' ,'best');
 

@@ -13,37 +13,46 @@ clearvars;
 close all;
 %% Import the data
 [~, ~, raw] = xlsread('C:\Users\Marvin\Desktop\Projektarbeit\gondola\doc\Measurement_Matlab\2017_10_04\2017_10_04.xls','02');
-raw = raw(3:11,:);
+raw = raw(3:11,1:6);
+
+[~, ~, raw2] = xlsread('C:\Users\Marvin\Desktop\Projektarbeit\gondola\doc\Measurement_Matlab\2017_10_04\2017_10_04.xls','02');
+raw2 = raw2(20:28,1:6);
 
 %% Replace non-numeric cells with 0.0
 R = cellfun(@(x) (~isnumeric(x) && ~islogical(x)) || isnan(x),raw); % Find non-numeric cells
 raw(R) = {0.0}; % Replace non-numeric cells
 
+R2 = cellfun(@(x) (~isnumeric(x) && ~islogical(x)) || isnan(x),raw2); % Find non-numeric cells
+raw2(R2) = {0.0}; % Replace non-numeric cells
+
 %% Create output variable
 data = reshape([raw{:}],size(raw));
 
+data2 = reshape([raw2{:}],size(raw2));
 
 %% Allocate imported array to column variable names
-Measurement = data(:,1);
-Weight = data(:,2); % gramm
-g = 9.81;           % acceleration
-Force = Weight * g / 100;
-MeasX = data(:,3);
-X = data(:,4);
-Extension = data(:,5);
+Measurement = [data(:,1) data2(:,1)];
+Weight = [data(:,2) data2(:,2)];           % gramm
+g = 9.81;                                   % acceleration
+Force = Weight * g / 100;                   % resulting force
+MeasX = [data(:,3) data2(:,3)];            % Measurement
+X = [data(:,4) data2(:,4)];                % X-Position
+Extension = [data(:,5) data2(:,5)];         % Extnsion due to force
+TotalRopeLength = [data(:,6) data2(:,6)];  % total length of rope, that could extend
 
 %% Clear temporary variables
-clearvars data raw R;
+clearvars data data2 raw raw2 R R2;
 
 %% Plot Error against weight
 figure;
 hold on;
-plot (Measurement, Extension);
+plot(Measurement(:,1), Extension(:,1));
+plot(Measurement(:,2), Extension(:,2));
 % TODO replace plot(Weight, Extension);
-title("Error relating to tension of the rope");
+title("Error relating to tension of the rope with different initial rope length");
 xlabel("Force [N]");
 ylabel("Extension [mm]");
-legend("Extension");
+legend("TotalRopeLength = 1872", "TotalRopeLength = 5454", 'Location' ,'best');
 
 %% Angle versus weight in 2D (alpha equals beta = middle of plane)
 F_load = 100;       % let's say 100 per cent
@@ -55,32 +64,4 @@ plot(alpha, F_rope);
 line([min(alpha) max(alpha)], [100 100], 'Color', 'k');
 xlabel("angle [°]");
 ylabel("Load factor [%]");
-legend("Percent of original load", "100 per cent line");
-
-%% Angle calculation
-AnchorPos1 = [0, 0, 0];
-AnchorPos2 = [0, 0, 1];
-AnchorPos3 = [0, 1, 0];
-GondolaPos = [0, 0, 1];
-
-figure;
-plot3([AnchorPos1(1) GondolaPos(1)], [AnchorPos1(2) GondolaPos(2)], [AnchorPos1(3) GondolaPos(3)]);
-hold on;
-grid on;
-axis on;
-xlabel("x");
-ylabel("y");
-zlabel("z");
-%plot3([AnchorPos2(1) GondolaPos(1)], [AnchorPos2(2) GondolaPos(2)], [AnchorPos2(3) GondolaPos(3)]);
-%plot3([AnchorPos3(1) GondolaPos(1)], [AnchorPos3(2) GondolaPos(2)], [AnchorPos3(3) GondolaPos(3)]);
-scatter3(GondolaPos(1), GondolaPos(2), GondolaPos(3));
-legend("1", "Gondola");
-
-C = GondolaPos - AnchorPos1;
-%u2 = AnchorPos2 - GondolaPos;
-%u3 = AnchorPos3 - GondolaPos;
-
-r = sqrt(C(1)^2 + C(2)^2 + C(3)^2);
-theta = acosd(C(3) / r)
-phi = atand(C(2)/C(1))
-
+legend("Percent of original load", "100 per cent line", 'Location' ,'best');
