@@ -62,6 +62,9 @@ void WebServer::handleRoot()
       Gondola *gondola = ApplicationInterface::get()->getGondola();
       if (gondola)
         gondola->setTargetPosition(newCoordinate, speed);
+
+      answer.append("<head><meta http-equiv=\"Refresh\" content=\"0; URL=/\"></head>");
+      prepareFooter(answer);
     }
     prepareGondolaMovePage(answer);
   }
@@ -416,18 +419,20 @@ void WebServer::prepareSetupSystemPage(std::string &s)
 void WebServer::prepareGondolaMovePage(std::string &s)
 {
   Gondola *gondola = ApplicationInterface::get()->getGondola();
+  if (gondola == NULL)
+    return;
+
   Coordinate coord = gondola->getCurrentPosition();
 
   if (gondola->getCurrentPosition() != gondola->getTargetPosition())
   {
     uint32_t travelTime = static_cast<uint32_t>(gondola->getTravelTime() + 1);    // round to next int
-    if (travelTime == 0)
-      travelTime = 1000;
     String travelTimeStr((travelTime + 1000) / 1000);                               // round to next second
     s.append("<head><meta http-equiv=\"Refresh\" content=\"" + std::string(travelTimeStr.c_str()) + "; URL=/\"></head>");
     s.append("<h1>Gondola is moving</h1>");
     s.append("Move from: " + gondola->getCurrentPosition().toString());
     s.append("<br>to: " + gondola->getTargetPosition().toString());
+    s.append("<br>Estimated position: " + gondola->getTimeEstimatedPosition().toString());
   }
   else
   {
@@ -467,8 +472,8 @@ void WebServer::prepareGondolaMovePage(std::string &s)
     s.append(FTOS(anchor->getAnchorPos().z));
     s.append("<br>Rope Offset (cm): ");
     s.append(FTOS(anchor->getRopeOffset()));
-    s.append("<br>Spooled distance (cm): ");
-    s.append(FTOS(anchor->getSpooledDistance()));
+    s.append("<br>(Estimated) Spooled distance (cm): ");
+    s.append(FTOS(anchor->getTimeEstimatedSpooledDistance()));
     s.append("<br>Target spooled distance (cm):");
     s.append(FTOS(anchor->getTargetSpooledDistance()));
     s.append("<br><br>");

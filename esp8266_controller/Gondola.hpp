@@ -71,6 +71,9 @@ public:
   */
   Coordinate getCurrentPosition();
 
+  // TODO doc
+  Coordinate getTimeEstimatedPosition();
+
   /**
   * Get gondolas target positon
   * @return Coordinate with target position
@@ -130,6 +133,7 @@ private:
   std::list<IAnchor *>            m_AnchorList;         //!< List of all hardware and remote anchors
   uint8_t                         m_UnfinishedAnchors;  //!< Bitflied to indicate which anchor is ready and which isn't
   uint32_t                        m_TravelTime;         //!< Time budget for travelling
+  uint32_t                        m_StartTime;          //!< Start of movement
 };
 
 

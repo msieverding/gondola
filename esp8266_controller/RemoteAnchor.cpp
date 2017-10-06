@@ -26,14 +26,14 @@ uint32_t RemoteAnchor::setTargetSpooledDistance(float targetDistance)
 
   if (distanceTodo < 0)
     distanceTodo = abs(distanceTodo);
-    
-  logVerbose("\nAnchor ID: %d on position: %s\n", m_ID, m_AnchorPosition.toString().c_str());
+
+  logVerbose("===\nAnchor ID: %d on position: %s\n", m_ID, m_AnchorPosition.toString().c_str());
   logVerbose("Spooled: %scm, Delta: %scm\n", FTOS(m_SpooledDistance), FTOS(distanceTodo));
 
   // calculate number of steps todo
   uint32_t stepsTodo = distanceTodo * STEP_CM;
 
-  logVerbose("Rounded to: (%scm): %scm, steps: %ld, microsteps: %ld\n\n", floatToString(MIN_PRECISION).c_str(), floatToString(distanceTodo).c_str(), stepsTodo, stepsTodo * MICROSTEPS);
+  logVerbose("Rounded to: (%scm): %scm, steps: %ld, microsteps: %ld\n===\n", floatToString(MIN_PRECISION).c_str(), floatToString(distanceTodo).c_str(), stepsTodo, stepsTodo * MICROSTEPS);
 
   stepsTodo *= MICROSTEPS; // we need to account for all microsteps
 
@@ -42,7 +42,7 @@ uint32_t RemoteAnchor::setTargetSpooledDistance(float targetDistance)
 
 bool RemoteAnchor::startMovement(uint32_t traveltime)
 {
-  m_TravelTime = traveltime;
+  IAnchor::startMovement(traveltime);
   return m_MoveCallback(this);
 }
 
