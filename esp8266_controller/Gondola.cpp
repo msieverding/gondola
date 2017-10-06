@@ -10,6 +10,7 @@ Gondola::Gondola()
  , m_AnchorList()
  , m_UnfinishedAnchors(0)
  , m_TravelTime(0)
+ , m_StartTime(0)
 {
   logDebug("Creating gondola at: %s\n", m_CurrentPosition.toString().c_str());
   CommandInterpreter::get()->addCommand("move", std::bind(&Gondola::moveCommand, this, std::placeholders::_1));
@@ -104,6 +105,23 @@ Coordinate Gondola::getCurrentPosition()
   return m_CurrentPosition;
 }
 
+Coordinate Gondola::getTimeEstimatedPosition()
+{
+  uint32_t travelTime = millis() - m_StartTime;
+
+  if (travelTime > m_TravelTime)
+    return m_CurrentPosition;
+
+  float travelPerCent = ((float)travelTime) / m_TravelTime;
+
+  Coordinate estimatedPosition;
+  estimatedPosition.x = m_CurrentPosition.x + (m_TargetPosition.x - m_CurrentPosition.x) * travelPerCent;
+  estimatedPosition.y = m_CurrentPosition.y + (m_TargetPosition.y - m_CurrentPosition.y) * travelPerCent;
+  estimatedPosition.z = m_CurrentPosition.z + (m_TargetPosition.z - m_CurrentPosition.z) * travelPerCent;
+
+  return estimatedPosition;
+}
+
 Coordinate Gondola::getTargetPosition()
 {
   return m_TargetPosition;
@@ -166,6 +184,7 @@ void Gondola::setTargetPosition(Coordinate &targetPos, float &speed)
     }
     it++;
   }
+  m_StartTime = millis();
 }
 
 std::list<IAnchor *> Gondola::getAnchorList(void)

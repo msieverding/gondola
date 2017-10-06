@@ -9,7 +9,6 @@ HardwareAnchor::HardwareAnchor(uint8_t id)
  , m_StepsTodo(0)
  , m_StepsDone(0)
  , m_Direction(1)
- , m_MoveStartTime(0)
  , m_MovementFinished(false)
  , m_Timer()
 {
@@ -21,6 +20,12 @@ HardwareAnchor::HardwareAnchor(uint8_t id)
 HardwareAnchor::~HardwareAnchor()
 {
   s_MoveInstance = NULL;
+}
+
+float HardwareAnchor::getTimeEstimatedSpooledDistance()
+{
+  // We don't need to estimate it. WE know it exactly.
+  return getSpooledDistance();
 }
 
 uint32_t HardwareAnchor::setTargetSpooledDistance(float targetDistance)
@@ -56,9 +61,8 @@ uint32_t HardwareAnchor::setTargetSpooledDistance(float targetDistance)
 
 bool HardwareAnchor::startMovement(uint32_t traveltime)
 {
-  m_TravelTime = traveltime;
+  IAnchor::startMovement(traveltime);
   logDebug("Start: %d\n", millis());
-  m_MoveStartTime = millis();
   m_Timer.attach_ms(1, move);
   return true;
 }
@@ -83,7 +87,7 @@ inline void HardwareAnchor::endStep()
 
 void HardwareAnchor::move()
 {
-  uint32_t stepsGoal = ceil(((float)((millis() - s_MoveInstance->m_MoveStartTime) * s_MoveInstance->m_StepsTodo)) / s_MoveInstance->m_TravelTime);
+  uint32_t stepsGoal = ceil(((float)((millis() - s_MoveInstance->m_StartTime) * s_MoveInstance->m_StepsTodo)) / s_MoveInstance->m_TravelTime);
   if (stepsGoal > s_MoveInstance->m_StepsTodo)
     stepsGoal = s_MoveInstance->m_StepsTodo;
 
@@ -109,7 +113,7 @@ void HardwareAnchor::loop()
   if (m_MovementFinished == true)
   {
     m_MovementFinished = false;
-    m_MoveStartTime = 0;
+    m_StartTime = 0;
     executeReadyCallback();
     logDebug("Finish: %d, m_SpooledDistance=%s.\n", millis(), FTOS(m_SpooledDistance));
   }

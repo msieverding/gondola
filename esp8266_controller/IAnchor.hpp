@@ -52,6 +52,12 @@ public:
   float getSpooledDistance();
 
   /**
+   * Get the time estimated current spooled distance
+   * @return estimated spooled distance
+   */
+  virtual float getTimeEstimatedSpooledDistance();
+
+  /**
    * Get the target spooled distance
    * @return target spooled distance
    */
@@ -83,7 +89,7 @@ public:
    * @param  traveltime time budget for the movement
    * @return            success. Could be false if communication fails
    */
-  virtual bool startMovement(uint32_t traveltime) = 0;
+  virtual bool startMovement(uint32_t traveltime);
 
   /**
    * Register a callback, that should be executed, when an initial spooled distance should be set
@@ -154,6 +160,7 @@ protected:
   callback          m_ReadyCallback;              //!< Callback that should be executed to propagate the finished movement
   uint32_t          m_TravelTime;                 //!< Time budget for movement
   float             m_RopeOffset;                 //!< Spool that is spooled from motor to anchor
+  uint32_t          m_StartTime;                  //!< start of movement
 };
 
 #endif /* _I_ANCHOR_HPP_ */

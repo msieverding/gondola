@@ -26,7 +26,7 @@ uint32_t RemoteAnchor::setTargetSpooledDistance(float targetDistance)
 
   if (distanceTodo < 0)
     distanceTodo = abs(distanceTodo);
-    
+
   logVerbose("===\nAnchor ID: %d on position: %s\n", m_ID, m_AnchorPosition.toString().c_str());
   logVerbose("Spooled: %scm, Delta: %scm\n", FTOS(m_SpooledDistance), FTOS(distanceTodo));
 
@@ -42,7 +42,7 @@ uint32_t RemoteAnchor::setTargetSpooledDistance(float targetDistance)
 
 bool RemoteAnchor::startMovement(uint32_t traveltime)
 {
-  m_TravelTime = traveltime;
+  IAnchor::startMovement(traveltime);
   return m_MoveCallback(this);
 }
 

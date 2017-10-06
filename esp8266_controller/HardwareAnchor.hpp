@@ -25,6 +25,12 @@ public:
   ~HardwareAnchor();
 
   /**
+   * Get the time estimated current spooled distance
+   * @return estimated spooled distance
+   */
+  virtual float getTimeEstimatedSpooledDistance();
+
+  /**
    * Set the new spooling targetDistance.
    * Anchor will start to move with an ISR driven function that
    * toggles the pin for the stepper driver
@@ -76,7 +82,6 @@ private:
   uint32_t          m_StepsTodo;                  //!< necessary steps to reach the target position
   uint32_t          m_StepsDone;                  //!< steps already done
   int8_t            m_Direction;                  //!< Direction of movement -1 or +1
-  uint32_t          m_MoveStartTime;              //!< Time where movement starts
   bool              m_MovementFinished;           //!< Flag that indicates that the movement is finished. @see move() @see loop()
   Ticker            m_Timer;                      //!< ISR based timer for movement
 };

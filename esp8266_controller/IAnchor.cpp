@@ -10,6 +10,7 @@ IAnchor::IAnchor(uint8_t id, Coordinate anchorPosition, float spooledDistance, f
  , m_ReadyCallback()
  , m_TravelTime(0)
  , m_RopeOffset(ropeOffset)
+ , m_StartTime(0)
 {
 
 }
@@ -25,6 +26,13 @@ bool IAnchor::setInitialSpooledDistance(float spooledDistance)
   m_TargetSpooledDistance = m_SpooledDistance;
   // logDebug("Anchor '%d': Incoming initial spooling '%s'.\n", getID(), FTOS(m_SpooledDistance));
   return executeInitCallback();
+}
+
+bool IAnchor::startMovement(uint32_t traveltime)
+{
+  m_StartTime = millis();
+  m_TravelTime = traveltime;
+  return true;
 }
 
 Coordinate IAnchor::getAnchorPos()
@@ -69,6 +77,20 @@ uint8_t IAnchor::getID()
 float IAnchor::getSpooledDistance()
 {
   return m_SpooledDistance;
+}
+
+float IAnchor::getTimeEstimatedSpooledDistance()
+{
+  uint32_t travelTime = millis() - m_StartTime;
+
+  if (travelTime > m_TravelTime)
+    return m_SpooledDistance;
+
+  float travelPerCent = ((float)travelTime) / m_TravelTime;
+
+  float estimatedSpooledDistance = m_SpooledDistance + (m_TargetSpooledDistance - m_SpooledDistance) * travelPerCent;
+
+  return estimatedSpooledDistance;
 }
 
 float IAnchor::getTargetSpooledDistance()
