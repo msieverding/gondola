@@ -4,7 +4,7 @@
 #include <WebSocketsServer.h>
 #include <list>
 #include "Coordinate.hpp"
-
+#include "ESP8266WebServer.h"
 // TODO Doc
 
 typedef enum : byte {
@@ -26,6 +26,11 @@ typedef struct {
   bool connected;
 } RSSIClientData_t;
 
+typedef struct {
+  Coordinate pos;
+  float speed;
+} RSSIMovement_t;
+
 class ApplicationRSSIMeasServer
 {
 public:
@@ -45,6 +50,7 @@ private:
   std::list<RSSIClientData_t>     m_ClientList;
   uint32_t                        m_NextPing;
   uint32_t                        m_NextMeas;
+  std::list<RSSIMovement_t>       m_MovementList;
 };
 
 #endif /* _APPLICATION_RSSI_MEAS_SERVER_HPP_ */

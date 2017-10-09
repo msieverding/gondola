@@ -3,6 +3,7 @@
 
 #include <Arduino.h>
 #include "Gondola.hpp"
+#include "WebServer.hpp"
 
 // TODO Doc
 class ApplicationInterface
@@ -21,7 +22,10 @@ public:
 private:
   ApplicationInterface();
 
+  // Instance
   static ApplicationInterface       *s_Instance;
+
+  // Membervariables
   Gondola                           *m_Gondola;
 };
 #endif /* _APPLICATION_INTERFACE_HPP_ */

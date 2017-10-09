@@ -14,6 +14,7 @@ ApplicationRSSIMeasServer::ApplicationRSSIMeasServer(uint16_t port)
  , m_ClientList()
  , m_NextPing(0)
  , m_NextMeas(millis() + MEASUREMENT_INTERVALL)
+ , m_MovementList()
 {
   logDebug("Start Application RSSIMeasServer with webSocket on port %d\n", m_Port);
 #if (WEBSOCKETS_NETWORK_TYPE == NETWORK_ESP8266_ASYNC)
@@ -27,7 +28,7 @@ ApplicationRSSIMeasServer::ApplicationRSSIMeasServer(uint16_t port)
 
 ApplicationRSSIMeasServer::~ApplicationRSSIMeasServer()
 {
-
+  CommandInterpreter::get()->deleteCommand("appPrint");
 }
 
 void ApplicationRSSIMeasServer::loop()

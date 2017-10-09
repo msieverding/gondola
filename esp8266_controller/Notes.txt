@@ -5,7 +5,6 @@ TODO:
 - implement state for SW LED
 - implement actions with button
 - Make 2D and 3D model from 2017_10_04 for a generic gondola case
-- Find sign error in x component 3D model
 - github descritption
 - github readme
 
