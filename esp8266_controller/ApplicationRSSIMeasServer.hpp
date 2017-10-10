@@ -26,10 +26,17 @@ typedef struct {
   bool connected;
 } RSSIClientData_t;
 
-typedef struct {
-  Coordinate pos;
-  float speed;
-} RSSIMovement_t;
+typedef enum rssiMeasState_e : byte {
+  STATE_INIT,
+  STATE_DIR_ZN,
+  STATE_DIR_ZP,
+  STATE_DIR_YN,
+  STATE_DIR_YP,
+  STATE_FIN,
+  STATE_MOVE_AND_CLEAR,
+  STATE_MOVE_AND_MEAS,
+  STATE_MEAS
+} rssiMeasState_t;
 
 class ApplicationRSSIMeasServer
 {
@@ -44,13 +51,15 @@ private:
   RSSIClientData_t *getClientData(uint8_t clientNum);
   RSSIClientData_t *getClientData(uint8_t* mac);
   bool printClientData(std::string &s);
+  void initiateMeasurement();
 
   uint16_t                        m_Port;
   WebSocketsServer                m_WebSocketServer;  //!< Server from WebSocketsLibrary
   std::list<RSSIClientData_t>     m_ClientList;
   uint32_t                        m_NextPing;
-  uint32_t                        m_NextMeas;
-  std::list<RSSIMovement_t>       m_MovementList;
+  int32_t                         m_LastMeasurement[2];
+  rssiMeasState_t                 m_State;
+  rssiMeasState_t                 m_NextState;
 };
 
 #endif /* _APPLICATION_RSSI_MEAS_SERVER_HPP_ */

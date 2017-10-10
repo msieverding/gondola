@@ -13,10 +13,12 @@ ApplicationRSSIMeasServer::ApplicationRSSIMeasServer(uint16_t port)
  , m_WebSocketServer(m_Port)
  , m_ClientList()
  , m_NextPing(0)
- , m_NextMeas(millis() + MEASUREMENT_INTERVALL)
- , m_MovementList()
+ , m_LastMeasurement()
+ , m_State(STATE_INIT)
+ , m_NextState(STATE_INIT)
 {
-  logDebug("Start Application RSSIMeasServer with webSocket on port %d\n", m_Port);
+  m_LastMeasurement[0] = m_LastMeasurement[1] = 0x80000000; // INT_MIN
+  logDebug("Start Application RSSIMeasServer with WebSocket on port %d\n", m_Port);
 #if (WEBSOCKETS_NETWORK_TYPE == NETWORK_ESP8266_ASYNC)
   logDebug("WebSocketServer runs in asynchronous mode!\n");
 #endif
@@ -56,11 +58,116 @@ void ApplicationRSSIMeasServer::loop()
     m_NextPing = millis() + PING_INTERVALL;
   }
 
-  if (millis() > m_NextMeas)
+  Gondola *gondola = ApplicationInterface::get()->getGondola();
+  float speed = 10.0f;
+
+  switch(m_State)
   {
-    uint8_t data[1] = {RSSI_MEAS_S_MEAS_CMD};
-    m_WebSocketServer.broadcastBIN(data, 1);
-    m_NextMeas += MEASUREMENT_INTERVALL;
+    case STATE_INIT:
+    {
+      if (gondola->getTargetPosition() != gondola->getTimeEstimatedPosition())
+        break; // movement not finished
+
+      Coordinate startPos(40, 160, 300);
+      gondola->setTargetPosition(startPos, speed);
+      m_State = STATE_MOVE_AND_MEAS;
+      m_NextState = STATE_DIR_ZN;
+      break;
+    }
+
+    case STATE_DIR_ZN:
+    {
+      // Value gets worse (more negative)
+      if (m_LastMeasurement[1] < m_LastMeasurement[0])
+      {
+        m_State = STATE_DIR_ZP;
+        break;
+      }
+      Coordinate newPos(gondola->getCurrentPosition());
+      newPos.z -= 20;
+      gondola->setTargetPosition(newPos, speed);
+      m_State = STATE_MOVE_AND_MEAS;
+      m_NextState = STATE_DIR_ZN;
+      break;
+    }
+
+    case STATE_DIR_ZP:
+    {
+      // Value gets worse (more negative)
+      if (m_LastMeasurement[1] < m_LastMeasurement[0])
+      {
+        // rewert step
+        Coordinate newPos(gondola->getCurrentPosition());
+        newPos.z -= 20;
+        gondola->setTargetPosition(newPos, speed);
+        m_State = STATE_MOVE_AND_CLEAR;
+        m_NextState = STATE_DIR_YN;
+        break;
+      }
+      Coordinate newPos(gondola->getCurrentPosition());
+      newPos.z += 20;
+      gondola->setTargetPosition(newPos, speed);
+      m_State = STATE_MOVE_AND_MEAS;
+      m_NextState = STATE_DIR_ZP;
+      break;
+    }
+
+    case STATE_DIR_YN:
+    {
+      // Value gets worse (more negative)
+      if (m_LastMeasurement[1] < m_LastMeasurement[0])
+      {
+        m_State = STATE_DIR_YP;
+        break;
+      }
+      Coordinate newPos(gondola->getCurrentPosition());
+      newPos.y -= 20;
+      gondola->setTargetPosition(newPos, speed);
+      m_State = STATE_MOVE_AND_MEAS;
+      m_NextState = STATE_DIR_YN;
+      break;
+    }
+
+    case STATE_DIR_YP:
+    {
+      // Value gets worse (more negative)
+      if (m_LastMeasurement[1] < m_LastMeasurement[0])
+      {
+        // rewert step
+        Coordinate newPos(gondola->getCurrentPosition());
+        newPos.y -= 20;
+        gondola->setTargetPosition(newPos, speed);
+        m_State = STATE_MOVE_AND_CLEAR;
+        m_NextState = STATE_FIN;
+        break;
+      }
+      Coordinate newPos(gondola->getCurrentPosition());
+      newPos.y += 20;
+      gondola->setTargetPosition(newPos, speed);
+      m_State = STATE_MOVE_AND_MEAS;
+      m_NextState = STATE_DIR_YP;
+      break;
+    }
+
+    case STATE_MOVE_AND_MEAS:
+    {
+      if (gondola->getTargetPosition() != gondola->getTimeEstimatedPosition())
+        break; // movement not finished
+
+      m_State = STATE_MEAS;
+      initiateMeasurement();
+    }
+
+    case STATE_MOVE_AND_CLEAR:
+    {
+      if (gondola->getTargetPosition() != gondola->getTimeEstimatedPosition())
+        break; // movement not finished
+
+      m_LastMeasurement[0] = m_LastMeasurement[1] = 0x80000000;
+      m_State = m_NextState;
+    }
+    default:
+      break;
   }
 
 #if (WEBSOCKETS_NETWORK_TYPE != NETWORK_ESP8266_ASYNC)
@@ -147,7 +254,11 @@ void ApplicationRSSIMeasServer::webSocketEvent(uint8_t num, WStype_t type, uint8
             clientData->measurementList.pop_front();
           }
         }
-        // TODO handle measurement
+        m_LastMeasurement[1] = m_LastMeasurement[0];
+        m_LastMeasurement[0] = rssi;
+        
+        if (m_State == STATE_MEAS)
+          m_State = m_NextState;
         break;
       }
 
@@ -181,8 +292,6 @@ RSSIClientData_t *ApplicationRSSIMeasServer::getClientData(uint8_t* mac)
   std::list<RSSIClientData_t>::iterator it;
   for (it = m_ClientList.begin(); it != m_ClientList.end(); it++)
   {
-    logDebug("MAC_in:   %d:%d:%d:%d:%d:%d\n", mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
-    logDebug("MAC_list: %d:%d:%d:%d:%d:%d\n", it->mac[0], it->mac[1], it->mac[2], it->mac[3], it->mac[4], it->mac[5]);
     // MAC equals iterators MAC
     bool unequal = false;
     for (uint8_t i = 0; i < 6; i++)
@@ -195,11 +304,9 @@ RSSIClientData_t *ApplicationRSSIMeasServer::getClientData(uint8_t* mac)
     }
     if (!unequal)
     {
-      logDebug("Equal\n");
       return &(*it);
     }
   }
-  logDebug("Unequal\n");
   return NULL;
 }
 
@@ -217,4 +324,10 @@ bool ApplicationRSSIMeasServer::printClientData(std::string &s)
     }
   }
   return true;
+}
+
+void ApplicationRSSIMeasServer::initiateMeasurement()
+{
+  uint8_t data[1] = {RSSI_MEAS_S_MEAS_CMD};
+  m_WebSocketServer.broadcastBIN(data, 1);
 }

@@ -8,6 +8,8 @@
 #include "WebSocketServer.hpp"
 #include "WebSocketClient.hpp"
 
+#define BUT_PIN 1
+
 ConnectionMgr *ConnectionMgr::s_Instance = NULL;
 
 ConnectionMgr *ConnectionMgr::get()
@@ -31,8 +33,14 @@ ConnectionMgr::ConnectionMgr()
  , m_WebSocket(NULL)
  // WebServer
  , m_WebServer(Config::get()->getWS_PORT())
+ , m_NextButtonCheck(0)
+ , m_ButtonRaw(0)
+ , m_ButtonState(BUT_RELEASED)
 {
   s_Instance = this;          // set static variable here, since changeConnection creates a WebSocketServer which will use ConnectionMgr::get()
+
+  initButton();
+
   CommandInterpreter::get()->addCommand(std::string("contype"), std::bind(&ConnectionMgr::contypeCommand, this, std::placeholders::_1));
 
   changeConnection(m_ConnectionType);
@@ -142,6 +150,8 @@ WebServer &ConnectionMgr::getWebServer()
 
 void ConnectionMgr::loop()
 {
+  checkButton();
+
   if (m_Connection)
     m_Connection->loop();
 
@@ -166,28 +176,28 @@ bool ConnectionMgr::contypeCommand(std::string &s)
   {
     std::string arg;
     CI->getArgument(s, arg, 0);
-    if (arg.compare("WIFI") == 0)
+    if (arg.compare("WIFI") == 0 || arg.compare("wifi") == 0)
     {
       Config::get()->setCM_CONNECTIONTYPE(CON_WIFI_CONNECTION);
       Config::get()->writeToEEPROM();
       changeConnection(CON_WIFI_CONNECTION);
       return true;
     }
-    else if (arg.compare("AP") == 0)
+    else if (arg.compare("AP") == 0 || arg.compare("ap") == 0)
     {
       Config::get()->setCM_CONNECTIONTYPE(CON_ACCESS_POINT);
       changeConnection(CON_ACCESS_POINT);
       Config::get()->writeToEEPROM();
       return true;
     }
-    else if (arg.compare("DUAL") == 0)
+    else if (arg.compare("DUAL") == 0 || arg.compare("dual") == 0)
     {
       Config::get()->setCM_CONNECTIONTYPE(CON_DUAL_CONNECTION);
       changeConnection(CON_DUAL_CONNECTION);
       Config::get()->writeToEEPROM();
       return true;
     }
-    else if (arg.compare("NONE") == 0)
+    else if (arg.compare("NONE") == 0 || arg.compare("none") == 0)
     {
       Config::get()->setCM_CONNECTIONTYPE(CON_NONE);
       changeConnection(CON_NONE);
@@ -209,4 +219,45 @@ void ConnectionMgr::reset()
   delete(s_Instance);
   s_Instance = NULL;
   ConnectionMgr::get();
+}
+
+void ConnectionMgr::initButton()
+{
+  // set input and pullup
+  pinMode(BUT_PIN, INPUT_PULLUP);
+}
+
+void ConnectionMgr::checkButton()
+{
+  if (millis() > m_NextButtonCheck)
+  {
+    m_NextButtonCheck = millis() + 10;
+    m_ButtonRaw <<= 1;
+    m_ButtonRaw |= !digitalRead(BUT_PIN);
+
+    if (m_ButtonRaw == 0xFF && m_ButtonState == BUT_RELEASED)
+    {
+      m_ButtonState = BUT_GOT_PRESSED;
+    }
+    else if (m_ButtonState == BUT_GOT_PRESSED)
+    {
+      m_ButtonState = BUT_PRESSED;
+    }
+    else if (m_ButtonRaw == 0x00 && m_ButtonState == BUT_PRESSED)
+    {
+      m_ButtonState = BUT_GOT_RELEASED;
+    }
+    else if (m_ButtonState == BUT_GOT_RELEASED)
+    {
+      m_ButtonState = BUT_RELEASED;
+    }
+
+    if (m_ButtonState == BUT_GOT_PRESSED)
+    {
+      logDebug("Button pressed: Reset config\n");
+      Config::resetConfig();
+      logDebug("Initiate default connection\n");
+      requestChangeConnection(Config::get()->getCM_CONNECTIONTYPE());
+    }
+  }
 }

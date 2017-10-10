@@ -10,8 +10,6 @@ extern "C"{
   #include "user_interface.h"
 }
 
-#define LOG_SIZE    1000
-
 WebServer::WebServer(uint16_t port, bool configureServer)
  : m_Server(port)
 {

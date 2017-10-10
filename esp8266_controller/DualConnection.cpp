@@ -66,7 +66,7 @@ bool DualConnection::setupWiFiConnection()
     Serial.print(".");
     if (++tries == WIFI_CONNECTION_RETRIES)
     {
-      logWarning("Not able to connecto to WiFi Network %s. Go to access point only mode.\n", m_WC_SSID.c_str());
+      logWarning("Not able to connect to WiFi Network %s. Go to access point only mode.\n", m_WC_SSID.c_str());
       return false;
     }
   }

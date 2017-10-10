@@ -20,10 +20,20 @@ typedef enum connectionType_e : byte {
  * Enumeration for all possible WebSocket types
  */
 typedef enum webSocketType_e : byte {
-  WEBSOCKET_NONE,                            //!< Don't provide a WebSocket
-  WEBSOCKET_SERVER,                          //!< Open a WebSocketServer
-  WEBSOCKET_CLIENT,                          //!< Connect to a given WebSocketServer as a WebSocketClient
+  WEBSOCKET_NONE,                       //!< Don't provide a WebSocket
+  WEBSOCKET_SERVER,                     //!< Open a WebSocketServer
+  WEBSOCKET_CLIENT,                     //!< Connect to a given WebSocketServer as a WebSocketClient
 } webSocketType_t;
+
+/**
+ * Enumeration for button types
+ */
+typedef enum buttonState_e : byte {
+  BUT_RELEASED,                         //!< button is releases
+  BUT_GOT_PRESSED,                      //!< positive edge
+  BUT_PRESSED,                          //!< button is pressed
+  BUT_GOT_RELEASED                      //!< negative edge
+} buttonState_t;
 
 /**
  * Class to manage the network connection of the chip. Also server and client
@@ -107,6 +117,12 @@ private:
    */
   bool contypeCommand(std::string &s);
 
+  // TODO doc
+  void initButton();
+
+  // TODO doc
+  void checkButton();
+
   // Instance
   static ConnectionMgr         *s_Instance;                 //!< instance of singleton
 
@@ -121,6 +137,10 @@ private:
   IWebSocket                   *m_WebSocket;                //!< Pointer to WebSocket to provide
   // WebServer
   WebServer                     m_WebServer;                //!< Pointer to current WebServer
+  // Button
+  uint32_t                      m_NextButtonCheck;          //!< Timer for button
+  uint8_t                       m_ButtonRaw;                //!< byte array for raw data of button
+  buttonState_t                 m_ButtonState;              //!< State of button
 };
 
 #endif /* _CONNECTION_MGR_HPP_ */

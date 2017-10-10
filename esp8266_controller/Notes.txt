@@ -1,9 +1,7 @@
 TODO:
 - calc system boundaries with anchor positions and check them before movement
 - check all TODOs
-- Find problems with dual connection
 - implement state for SW LED
-- implement actions with button
 
 Ideas:
 - Use NTP for a time (maybe good for debug output, etc..). NTP is used here (https://github.com/Azure/azure-iot-arduino-protocol-http/blob/master/examples/simplesample_http/simplesample_http.ino)
