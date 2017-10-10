@@ -47,19 +47,15 @@ public:
 private:
   /**
    * Setup the WiFi Connection
+   * @return success
    */
-  void setupWiFiConnection();
+  bool setupWiFiConnection();
 
   /**
    * Setup mDNS for the WiFi connection
+   * @return success
    */
-  void setupMDNS();
-
-  /**
-   * Event handler when the WiFi connection gets an IP
-   * @param event event to handle
-   */
-  void onEventGotIP(const WiFiEventStationModeGotIP &event);
+  bool setupMDNS();
 
   /**
    * Setup the access point
@@ -87,8 +83,5 @@ private:
   std::string              m_WC_Hostname;             //!< Hostname of this chip in this connection
   IPAddress                m_WC_Gateway;              //!< Gateway to use
   IPAddress                m_WC_Netmask;              //!< Netmask of this network
-  WiFiEventHandler         m_WC_StationGotIPHandler;  //!< Handler is called, when this station got an IP
-
-
 };
 #endif /* _DUAL_CONNECTION_ */

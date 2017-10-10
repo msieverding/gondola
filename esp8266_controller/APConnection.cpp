@@ -15,10 +15,10 @@ APConnection::APConnection(std::string ssid, std::string passphrase, IPAddress i
   WiFi.setOutputPower(20.5);            // set highest WiFi power
   WiFi.setPhyMode(WIFI_PHY_MODE_11N);   // activate mixed WiFi
 
-  logInfo("Setting soft-AP configuration... ");
+  logInfo("Setting Soft-AP configuration... ");
   logInfo(WiFi.softAPConfig(m_IPAddress, m_Gateway, m_Netmask) ? "Ready\n" : "Failed!\n");
 
-  logInfo("Setting soft-AP... ");
+  logInfo("Setting Soft-AP... ");
   if (m_Passphrase.length() >= 8 && m_Passphrase.length() <= 63)
     logInfo(WiFi.softAP(m_SSID.c_str(), m_Passphrase.c_str()) ? "Ready\n" : "Failed!\n");
   else
@@ -26,7 +26,7 @@ APConnection::APConnection(std::string ssid, std::string passphrase, IPAddress i
 
   logInfo("Soft-AP IP address: %s\n", WiFi.softAPIP().toString().c_str());
 
-  logInfo("WiFi AP SSID: %s\n", m_SSID.c_str());
+  logInfo("Soft-AP SSID: %s\n", m_SSID.c_str());
 
   if (m_Passphrase.length() > 8 && m_Passphrase.length() < 32)
   {
