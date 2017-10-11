@@ -34,7 +34,7 @@ uint32_t HardwareAnchor::setTargetSpooledDistance(float targetDistance)
   distanceTodo = roundPrecision(distanceTodo, MIN_PRECISION);   // round to a given precision (1 step)
   m_TargetSpooledDistance = m_SpooledDistance + distanceTodo;
 
-  logVerbose("\nAnchor ID: %d on position: %s\n", m_ID, m_AnchorPosition.toString().c_str());
+  logVerbose("Anchor ID: %d on position: %s\n", m_ID, m_AnchorPosition.toString().c_str());
   logVerbose("Spooled: %scm, Delta: %scm\n", FTOS(m_SpooledDistance), FTOS(distanceTodo));
 
   if (distanceTodo < 0)
@@ -62,7 +62,7 @@ uint32_t HardwareAnchor::setTargetSpooledDistance(float targetDistance)
 bool HardwareAnchor::startMovement(uint32_t traveltime)
 {
   IAnchor::startMovement(traveltime);
-  logDebug("Start: %d\n", millis());
+  logVerbose("Start: %d\n", millis());
   m_Timer.attach_ms(1, move);
   return true;
 }
@@ -115,6 +115,6 @@ void HardwareAnchor::loop()
     m_MovementFinished = false;
     m_StartTime = 0;
     executeReadyCallback();
-    logDebug("Finish: %d, m_SpooledDistance=%s.\n", millis(), FTOS(m_SpooledDistance));
+    logVerbose("Finish: %d, m_SpooledDistance=%s.\n", millis(), FTOS(m_SpooledDistance));
   }
 }

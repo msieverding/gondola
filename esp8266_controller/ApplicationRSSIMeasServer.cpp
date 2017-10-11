@@ -14,8 +14,8 @@ ApplicationRSSIMeasServer::ApplicationRSSIMeasServer(uint16_t port)
  , m_ClientList()
  , m_NextPing(0)
  , m_LastMeasurement()
- , m_State(STATE_INIT)
- , m_NextState(STATE_INIT)
+ , m_State(STATE_CONNECT)
+ , m_NextState(STATE_CONNECT)
 {
   m_LastMeasurement[0] = m_LastMeasurement[1] = 0x80000000; // INT_MIN
   logDebug("Start Application RSSIMeasServer with WebSocket on port %d\n", m_Port);
@@ -65,10 +65,11 @@ void ApplicationRSSIMeasServer::loop()
   {
     case STATE_INIT:
     {
-      if (gondola->getTargetPosition() != gondola->getTimeEstimatedPosition())
+      if (!gondola->isIdle())
         break; // movement not finished
 
-      Coordinate startPos(40, 160, 300);
+      logDebug("State init\n");
+      Coordinate startPos(40, 160, 30);
       gondola->setTargetPosition(startPos, speed);
       m_State = STATE_MOVE_AND_MEAS;
       m_NextState = STATE_DIR_ZN;
@@ -77,10 +78,17 @@ void ApplicationRSSIMeasServer::loop()
 
     case STATE_DIR_ZN:
     {
+      logDebug("State dir z- %d - %d\n", m_LastMeasurement[1], m_LastMeasurement[0]);
       // Value gets worse (more negative)
-      if (m_LastMeasurement[1] < m_LastMeasurement[0])
+      if ((m_LastMeasurement[1] > m_LastMeasurement[0]) && (m_LastMeasurement[1] != (int32_t)0x80000000))
       {
-        m_State = STATE_DIR_ZP;
+        // rewert last step
+        Coordinate newPos(gondola->getCurrentPosition());
+        newPos.z += 20;
+        gondola->setTargetPosition(newPos, speed);
+        m_State = STATE_MOVE_AND_MEAS;
+        m_NextState = STATE_DIR_ZP;
+        m_LastMeasurement[0] = m_LastMeasurement[1] = 0x80000000;
         break;
       }
       Coordinate newPos(gondola->getCurrentPosition());
@@ -93,15 +101,17 @@ void ApplicationRSSIMeasServer::loop()
 
     case STATE_DIR_ZP:
     {
+      logDebug("State dir z+ %d - %d\n", m_LastMeasurement[1], m_LastMeasurement[0]);
       // Value gets worse (more negative)
-      if (m_LastMeasurement[1] < m_LastMeasurement[0])
+      if (m_LastMeasurement[1] > m_LastMeasurement[0] && (m_LastMeasurement[1] != (int32_t)0x80000000))
       {
         // rewert step
         Coordinate newPos(gondola->getCurrentPosition());
         newPos.z -= 20;
         gondola->setTargetPosition(newPos, speed);
-        m_State = STATE_MOVE_AND_CLEAR;
+        m_State = STATE_MOVE_AND_MEAS;
         m_NextState = STATE_DIR_YN;
+        m_LastMeasurement[0] = m_LastMeasurement[1] = 0x80000000;
         break;
       }
       Coordinate newPos(gondola->getCurrentPosition());
@@ -114,10 +124,16 @@ void ApplicationRSSIMeasServer::loop()
 
     case STATE_DIR_YN:
     {
+      logDebug("State dir y- %d - %d\n", m_LastMeasurement[1], m_LastMeasurement[0]);
       // Value gets worse (more negative)
-      if (m_LastMeasurement[1] < m_LastMeasurement[0])
+      if ((m_LastMeasurement[1] > m_LastMeasurement[0]) && (m_LastMeasurement[1] != (int32_t)0x80000000))
       {
-        m_State = STATE_DIR_YP;
+        Coordinate newPos(gondola->getCurrentPosition());
+        newPos.y += 20;
+        gondola->setTargetPosition(newPos, speed);
+        m_State = STATE_MOVE_AND_MEAS;
+        m_NextState = STATE_DIR_YP;
+        m_LastMeasurement[0] = m_LastMeasurement[1] = 0x80000000;
         break;
       }
       Coordinate newPos(gondola->getCurrentPosition());
@@ -130,15 +146,17 @@ void ApplicationRSSIMeasServer::loop()
 
     case STATE_DIR_YP:
     {
+      logDebug("State dir y+ %d - %d\n", m_LastMeasurement[1], m_LastMeasurement[0]);
       // Value gets worse (more negative)
-      if (m_LastMeasurement[1] < m_LastMeasurement[0])
+      if (m_LastMeasurement[1] > m_LastMeasurement[0] && (m_LastMeasurement[1] != (int32_t)0x80000000))
       {
         // rewert step
         Coordinate newPos(gondola->getCurrentPosition());
         newPos.y -= 20;
         gondola->setTargetPosition(newPos, speed);
-        m_State = STATE_MOVE_AND_CLEAR;
+        m_State = STATE_MOVE_AND_MEAS;
         m_NextState = STATE_FIN;
+        m_LastMeasurement[0] = m_LastMeasurement[1] = 0x80000000;
         break;
       }
       Coordinate newPos(gondola->getCurrentPosition());
@@ -151,21 +169,14 @@ void ApplicationRSSIMeasServer::loop()
 
     case STATE_MOVE_AND_MEAS:
     {
-      if (gondola->getTargetPosition() != gondola->getTimeEstimatedPosition())
+      if (!gondola->isIdle())
         break; // movement not finished
 
       m_State = STATE_MEAS;
       initiateMeasurement();
+      break;
     }
 
-    case STATE_MOVE_AND_CLEAR:
-    {
-      if (gondola->getTargetPosition() != gondola->getTimeEstimatedPosition())
-        break; // movement not finished
-
-      m_LastMeasurement[0] = m_LastMeasurement[1] = 0x80000000;
-      m_State = m_NextState;
-    }
     default:
       break;
   }
@@ -184,6 +195,7 @@ void ApplicationRSSIMeasServer::webSocketEvent(uint8_t num, WStype_t type, uint8
     logDebug("[APP RSSIMeas][%u] Disconnected!\n", num);
     RSSIClientData_t *clientData = getClientData(num);
     clientData->connected = false;
+    m_State = STATE_CONNECT;
     break;
   }
 
@@ -193,6 +205,7 @@ void ApplicationRSSIMeasServer::webSocketEvent(uint8_t num, WStype_t type, uint8
     logDebug("[APP RSSIMeas][%u] Connected from %d.%d.%d.%d url: %s\n", num, ip[0], ip[1], ip[2], ip[3], payload);
 		// send message back to client
 		m_WebSocketServer.sendTXT(num, "[APP RSSIMeas] Connected");
+    m_State = STATE_INIT;
   }
   break;
 
@@ -256,7 +269,7 @@ void ApplicationRSSIMeasServer::webSocketEvent(uint8_t num, WStype_t type, uint8
         }
         m_LastMeasurement[1] = m_LastMeasurement[0];
         m_LastMeasurement[0] = rssi;
-        
+
         if (m_State == STATE_MEAS)
           m_State = m_NextState;
         break;

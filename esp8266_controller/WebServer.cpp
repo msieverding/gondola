@@ -200,12 +200,10 @@ void WebServer::handleSetupSystem()
     if (m_Server.arg("WSO_LOCALANCHOR").equals("YES"))
     {
       Config::get()->setWSO_LOCALANCHOR(true);
-      logDebug("set WSO_LOCALANCHOR");
     }
     else
     {
       Config::get()->setWSO_LOCALANCHOR(false);
-      logDebug("unset WSO_LOCALANCHOR");
     }
   }
 

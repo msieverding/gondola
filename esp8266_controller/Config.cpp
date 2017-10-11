@@ -99,7 +99,7 @@ Config::Config()
  // WebSocketClient
  , WSO_HOST("www.gondola.com")
  // Logging
- , LOG_LEVEL(LOG_VERBOSE)
+ , LOG_LEVEL(LOG_DEBUG)
 {
   EEPROM.begin(EEPROM_LENGTH);
 }

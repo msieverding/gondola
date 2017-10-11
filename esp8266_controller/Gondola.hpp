@@ -105,6 +105,9 @@ public:
    * @return     pointer to anchor with id
    */
   IAnchor *getAnchor(uint8_t id);
+
+  // TODO Doc
+  bool isIdle();
 private:
 
   /**

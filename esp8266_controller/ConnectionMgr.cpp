@@ -8,7 +8,7 @@
 #include "WebSocketServer.hpp"
 #include "WebSocketClient.hpp"
 
-#define BUT_PIN 1
+#define BUT_PIN 12
 
 ConnectionMgr *ConnectionMgr::s_Instance = NULL;
 

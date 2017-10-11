@@ -27,13 +27,13 @@ typedef struct {
 } RSSIClientData_t;
 
 typedef enum rssiMeasState_e : byte {
+  STATE_CONNECT,
   STATE_INIT,
   STATE_DIR_ZN,
   STATE_DIR_ZP,
   STATE_DIR_YN,
   STATE_DIR_YP,
   STATE_FIN,
-  STATE_MOVE_AND_CLEAR,
   STATE_MOVE_AND_MEAS,
   STATE_MEAS
 } rssiMeasState_t;

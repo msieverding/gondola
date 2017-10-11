@@ -138,15 +138,17 @@ void Gondola::setTargetPosition(Coordinate &targetPos, float &speed)
   if (speed == 0.0f)
     speed = 1.0f;
 
+  logDebug("Move to: %s\n", targetPos.toString().c_str());
+
   float travelDistance = Coordinate::euclideanDistance(m_CurrentPosition, m_TargetPosition);
   if (travelDistance == 0)
   {
-    logDebug("Travel distance = 0. Nothing to do.\n");
+    logVerbose("Travel distance = 0. Nothing to do.\n");
     return;
   }
 
   float travelTime = travelDistance / speed;
-  logVerbose("\nTravelDistance: %s, TravelTime: %s\n", FTOS(travelDistance), FTOS(travelTime));
+  logVerbose("TravelDistance: %s, TravelTime: %s\n", FTOS(travelDistance), FTOS(travelTime));
   uint32_t maxSteps = 0;
 
   // prepare to spool
@@ -190,6 +192,11 @@ void Gondola::setTargetPosition(Coordinate &targetPos, float &speed)
 std::list<IAnchor *> Gondola::getAnchorList(void)
 {
   return m_AnchorList;
+}
+
+bool Gondola::isIdle()
+{
+  return m_UnfinishedAnchors == 0;
 }
 
 bool Gondola::moveCommand(std::string &s)

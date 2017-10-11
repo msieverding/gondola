@@ -27,7 +27,7 @@ uint32_t RemoteAnchor::setTargetSpooledDistance(float targetDistance)
   if (distanceTodo < 0)
     distanceTodo = abs(distanceTodo);
 
-  logVerbose("===\nAnchor ID: %d on position: %s\n", m_ID, m_AnchorPosition.toString().c_str());
+  logVerbose("Anchor ID: %d on position: %s\n", m_ID, m_AnchorPosition.toString().c_str());
   logVerbose("Spooled: %scm, Delta: %scm\n", FTOS(m_SpooledDistance), FTOS(distanceTodo));
 
   // calculate number of steps todo
