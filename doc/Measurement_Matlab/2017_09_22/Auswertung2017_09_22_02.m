@@ -47,10 +47,14 @@ clearvars data raw;
 close all;
 
 %% Plot Error against input length
-figure;
+f = figure;
+set(f, 'Units', 'normalized', 'Position', [0.2, 0.2, 0.3, 0.4]);
+ylim([-100 350]);
 hold on;
-plot(Length, Err, 'rx');
-plot(Length, ErrCorr, 'gx');
+h = plot(Length, Err, 'rx');
+set(h, 'linewidth', 1.5);
+h = plot(Length, ErrCorr, 'gx');
+set(h, 'linewidth', 1.5);
 title("Error against input length");
 xlabel("Input length [mm]");
 ylabel("Error [mm]");

@@ -37,14 +37,17 @@ ErrX = DistX(:) - X(:);
 ErrY = DistY(:) - Y(:);
 
 %% Heatmap
-figure();
+f = figure;
+set(f, 'Units', 'normalized', 'Position', [0.2, 0.2, 0.6, 0.4]); 
 hold on;
 title("Accuracy in 2D with start at (x=400/y=1500)");
 set(gca,'YDir','reverse');      % reverse direction of y axis
 plot(Y, X, 'b.');
 plot(DistY, DistX, 'r.');
-plot(CalibrationPointY, CalibrationPointX, 'go');
-plot([Anchor1Y Anchor2Y], [Anchor1X Anchor2X], 'ko');
+h = plot(CalibrationPointY, CalibrationPointX, 'go');
+set(h, 'linewidth', 1.5);
+h = plot([Anchor1Y Anchor2Y], [Anchor1X Anchor2X], 'ko');
+set(h, 'linewidth', 1.5);
 legend("Input", "Output", "Calibration Point", "Motor", 'Location' ,'best');
 xlim([0 3236]);
 ylim([0 2364]);
@@ -89,12 +92,16 @@ ylabel("Spooled distance [mm]");
 legend("Input", "Output", "Calibrated length", 'Location' ,'best');
 
 %% Spool Error Motors
-figure;
+f = figure;
+ylim([-40 40]);
+set(f, 'Units', 'normalized', 'Position', [0.2, 0.2, 0.6, 0.4]); 
 hold on;
-plot(SpoolMotor1 - SpoolCalibrationMotor1, SpoolErrMotor1, 'r.');
-plot(SpoolMotor2 - SpoolCalibrationMotor2, SpoolErrMotor2, 'm.');
+h = plot(SpoolMotor1 - SpoolCalibrationMotor1, SpoolErrMotor1, 'rx');
+set(h, 'linewidth', 1.5);
+h = plot(SpoolMotor2 - SpoolCalibrationMotor2, SpoolErrMotor2, 'mx');
+set(h, 'linewidth', 1.5);
 grid on;
-title("Spooling Error Motor");
-xlabel("Spooled Distance from calibration point [mm]");
-ylabel("Spooling Error [mm]");
+title("Spooling error");
+xlabel("Spooled distance from calibration point [mm]");
+ylabel("Error [mm]");
 legend("Motor 1", "Motor 2", 'Location' ,'best');

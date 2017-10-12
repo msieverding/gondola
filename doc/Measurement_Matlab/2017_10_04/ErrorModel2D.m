@@ -13,8 +13,9 @@ r2 = sqrt((AnchorPos2(1) - Coordinate(1))^2 + (AnchorPos2(2) - Coordinate(2))^2)
 
 Anchor2YOffset = 3236;
 
-r1d = linspace(r1-dneg, r1+dpos, dneg + dpos + 1)';
-r2d = linspace(r2-dneg, r2+dpos, dneg + dpos + 1)';
+gridintensity = 0.5;
+r1d = linspace(r1-dneg, r1+dpos, (dneg + dpos + 1) * gridintensity)';
+r2d = linspace(r2-dneg, r2+dpos, (dneg + dpos + 1) * gridintensity)';
 idx1 = reshape(repmat(1:length(r1d), length(r2d), 1), 1, []); 
 idx2 = repmat(1:length(r2d), 1, length(r1d));
 combinations_all = [r1d(idx1), r2d(idx2)];
@@ -33,17 +34,21 @@ x_real = sqrt(r1.^2 - y_real.^2);
 
 
 close all;
-figure;
+f = figure;
+set(f, 'Units', 'normalized', 'Position', [0.2, 0.2, 0.3, 0.4]);
 hold on;
 title("2D error with given 1D error");
 set(gca,'YDir','reverse');      % reverse direction of y axis
 xlabel("Y [mm]");
 ylabel("X [mm]");
-plot(Coordinate(2), Coordinate(1), 'gx');
+
 %plot(y_real, x_real, 'gx');
-plot([y; y(1)], [x; x(1)], 'r--'); % Add first point to the end, to draw last line of polygon
+h = plot([y; y(1)], [x; x(1)], 'r--'); % Add first point to the end, to draw last line of polygon
+set(h, 'linewidth', 1.5);
 plot(y_all, x_all, 'k.');
-legend("target position", "edges of defective position", "grid of defective position", 'Location' ,'best');
+h = plot(Coordinate(2), Coordinate(1), 'gx');
+set(h, 'linewidth', 1.5);
+legend("edges of defective position", "grid of defective position", "target position", 'Location' ,'best');
 
 %% Maximum error per dimension
 x_err_max = max(x_all) - x_real;

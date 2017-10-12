@@ -44,26 +44,33 @@ TotalRopeLength = [data(:,6) data2(:,6)];  % total length of rope, that could ex
 clearvars data data2 raw raw2 R R2;
 
 %% Plot Error against weight
-figure;
+f = figure;
+set(f, 'Units', 'normalized', 'Position', [0.2, 0.2, 0.3, 0.4]);
 hold on;
-plot(Measurement(:,1), Extension(:,1));
-plot(Measurement(:,2), Extension(:,2));
+h = plot(Measurement(:,1), Extension(:,1), 'rx');
+set(h, 'linewidth', 1.5);
+h = plot(Measurement(:,2), Extension(:,2), 'mx');
+set(h, 'linewidth', 1.5);
 % TODO replace plot(Weight, Extension);
 title("Error relating to tension of the rope with different initial rope length");
 xlabel("Force [N]");
 ylabel("Extension [mm]");
-legend("TotalRopeLength = 1872", "TotalRopeLength = 5454", 'Location' ,'best');
+legend("Total length = 1872mm", "Total length = 5454mm", 'Location' ,'best');
 
 %% Angle versus weight in 2D (alpha equals beta = middle of plane)
 F_load = 100;       % let's say 100 per cent
-alpha = [10, 20, 30, 40, 50, 60, 70, 80];
+alpha = 5:100;
 F_rope = F_load ./ (sind(alpha) * 2);
-figure;
+f = figure;
+set(f, 'Units', 'normalized', 'Position', [0.2, 0.2, 0.3, 0.4]);
 hold on;
-plot(alpha, F_rope);
-line([min(alpha) max(alpha)], [100 100], 'Color', 'k');
+h = plot(alpha, F_rope, 'r');
+set(h, 'linewidth', 1.5);
+h = line([min(alpha) max(alpha)], [100 100], 'Color', 'k');
+set(h, 'linewidth', 1.5);
+title("Influence of angle to resulting force");
 xlabel("angle [°]");
 ylabel("Load factor [%]");
-legend("Percent of original load", "100 per cent line", 'Location' ,'best');
+legend("Per cent of original load", "100% line", 'Location' ,'best');
 
 

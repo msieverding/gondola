@@ -12,7 +12,7 @@
 clearvars;
 %% Import the data
 [~, ~, raw] = xlsread('C:\Users\Marvin\Desktop\Projektarbeit\gondola\doc\Measurement_Matlab\2017_09_22\2017_09_22.xls','04');
-raw = raw(3:end,2:5);
+raw = raw(3:42,2:5);
 
 %% Create output variable
 data = reshape([raw{:}],size(raw));
@@ -44,7 +44,7 @@ clearvars data raw;
 
 %% Import the data
 [~, ~, raw] = xlsread('C:\Users\Marvin\Desktop\Projektarbeit\gondola\doc\Measurement_Matlab\2017_09_21\2017_09_21.xls','01');
-raw = raw(3:end,1:5);
+raw = raw(3:42,1:5);
 
 %% Create output variable
 data = reshape([raw{:}],size(raw));
@@ -62,6 +62,9 @@ MeasYOld = data(:,5);
 %CalibrationPointX = 400;
 %CalibrationPointY = 1500;
 
+%% Clear temporary variables
+clearvars data raw;
+
 %% Computations
 DistXOld = - MeasXOld(:) + OffsetX;
 DistYOld = MeasYOld(:) - OffsetY;
@@ -69,21 +72,19 @@ ErrXOld = DistXOld(:) - X(:);
 ErrYOld = DistYOld(:) - Y(:);
 
 
-
-%% Clear temporary variables
-clearvars data raw;
-close all;
-
 %% Heatmap
-figure();
+f = figure;
+set(f, 'Units', 'normalized', 'Position', [0.2, 0.2, 0.6, 0.4]); 
 hold on;
 title("Accuracy in 2D with start at (x=400/y=1500)");
 set(gca,'YDir','reverse');      % reverse direction of y axis
 plot(Y, X, 'b.');
 plot(DistY, DistX, 'g.');
 plot(DistYOld, DistXOld, 'r.');
-plot(CalibrationPointY, CalibrationPointX, 'go');
-plot([Anchor1Y Anchor2Y], [Anchor1X Anchor2X], 'ko');
+h = plot(CalibrationPointY, CalibrationPointX, 'go');
+set(h, 'linewidth', 1.5);
+h = plot([Anchor1Y Anchor2Y], [Anchor1X Anchor2X], 'ko');
+set(h, 'linewidth', 1.5);
 legend("Input", "Corrected Output", "Output", "Calibration Point", "Motor", 'Location' ,'best');
 xlim([0 3236]);
 ylim([0 2364]);

@@ -39,7 +39,8 @@ clearvars data raw;
 close all;
 
 %% Plot Error against length for both motors
-figure;
+f = figure;
+set(f, 'Units', 'normalized', 'Position', [0.2, 0.1, 0.7, 0.7]);
 hold on;
 plot(Length, ErrM1, 'rx');
 plot(Length, ErrCorrM1, 'gx');
@@ -52,7 +53,8 @@ legend("Error without correction (M1)", "Error with implemented estimation (M1)"
 % looks like the error is not linear over the whole distance.
 
 %% Plot Error against rope on spool
-figure;
+f = figure;
+set(f, 'Units', 'normalized', 'Position', [0.2, 0.1, 0.7, 0.7]); ;
 hold on;
 plot(RopeOnSpoolM1, ErrM1, 'r');
 plot(RopeOnSpoolCorrM1, ErrCorrM1, 'g');
@@ -65,7 +67,8 @@ legend("Error without correction", "Error with implemented estimation", 'Locatio
 % das verhält, wenn man mehr rope hinzufügt.
 
 %% Regression of Error against rope on spool
-figure;
+f = figure;
+set(f, 'Units', 'normalized', 'Position', [0.2, 0.1, 0.7, 0.7]); ;
 hold on;
 x = RopeOnSpoolM1;
 y = ErrM1;
@@ -81,7 +84,8 @@ ylabel("Error [mm]");
 legend("error", "estimation of error", 'Location' ,'best');
 
 %% Regression of Error against real spooled rope Version 1
-figure;
+f = figure;
+set(f, 'Units', 'normalized', 'Position', [0.2, 0.1, 0.7, 0.7]); ;
 hold on;
 x = TotalLength - RopeOnSpoolM1;
 y = ErrM1;
@@ -96,7 +100,8 @@ ylabel("Error [mm]");
 legend("error", "estimation of error", 'Location' ,'best');
 
 %% Regression of Error against real spooled rope Version 2
-figure;
+f = figure;
+set(f, 'Units', 'normalized', 'Position', [0.2, 0.1, 0.7, 0.7]); ;
 hold on;
 x = TotalLength - RopeOnSpoolM1;
 y = ErrM1;

@@ -5,7 +5,7 @@
 clearvars;
 %% Import the data
 [~, ~, raw] = xlsread('C:\Users\Marvin\Desktop\Projektarbeit\gondola\doc\Measurement_Matlab\2017_09_19\2017_09_19.xls','01');
-raw = raw(3:end,:);
+raw = raw(3:16,:);
 
 %% Replace non-numeric cells with 0.0
 R = cellfun(@(x) (~isnumeric(x) && ~islogical(x)) || isnan(x),raw); % Find non-numeric cells
@@ -27,7 +27,8 @@ Diffmm = Measuredmm - Spooledmm;                % difference between input and o
 %% Clear temporary variables
 clearvars data raw R;
 
-figure;
+f = figure;
+set(f, 'Units', 'normalized', 'Position', [0.2, 0.1, 0.7, 0.7]); 
 hold on;
 plot (Spooledmm);
 plot (Measuredmm);
@@ -35,7 +36,9 @@ legend ("Input", "Output");
 title ("Input vs Output");
 ylabel ("distance [mm]");
 xlabel ("Measurement number");
-figure;
+
+f = figure;
+set(f, 'Units', 'normalized', 'Position', [0.2, 0.1, 0.7, 0.7]); 
 plot(Spooledmm, Diffmm);
 legend("Output - Input");
 title ("1D spooling error");

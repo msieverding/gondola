@@ -12,7 +12,7 @@
 clearvars;
 %% Import the data
 [~, ~, raw] = xlsread('C:\Users\Marvin\Desktop\Projektarbeit\gondola\doc\Measurement_Matlab\2017_09_22\2017_09_22.xls','04');
-raw = raw(3:end,2:5);
+raw = raw(3:42,2:5);
 
 %% Create output variable
 data = reshape([raw{:}],size(raw));
@@ -96,12 +96,17 @@ ylabel("Spooled distance [mm]");
 legend("Input", "Output", "Calibrated length", 'Location' ,'best');
 
 %% Spool Error Motors
-figure;
+f = figure;
+ylim([-40 40]);
+set(f, 'Units', 'normalized', 'Position', [0.2, 0.2, 0.6, 0.4]); 
 hold on;
-plot(SpoolMotor1 - SpoolCalibrationMotor1, SpoolErrMotor1, 'r.');
-plot(SpoolMotor2 - SpoolCalibrationMotor2, SpoolErrMotor2, 'm.');
+h = plot(SpoolMotor1 - SpoolCalibrationMotor1, SpoolErrMotor1, 'rx');
+set(h, 'linewidth', 1.5);
+h = plot(SpoolMotor2 - SpoolCalibrationMotor2, SpoolErrMotor2, 'mx');
+set(h, 'linewidth', 1.5);
 grid on;
-title("Spooling Error Motor");
-xlabel("Spooled Distance from calibration point [mm]");
-ylabel("Spooling Error [mm]");
+title("Spooling error");
+xlabel("Spooled distance from calibration point [mm]");
+ylabel("Error [mm]");
 legend("Motor 1", "Motor 2", 'Location' ,'best');
+

@@ -46,10 +46,13 @@ ErrEuclid = sqrt(Err(1,:).^2 + Err(2,:).^2 + Err(3,:).^2);
 clearvars data raw;
 
 %% Plot Euclidean Error
-figure;
+f = figure;
+set(f, 'Units', 'normalized', 'Position', [0.2, 0.2, 0.6, 0.4]); 
+ylim([0 80]);
 hold on;
 title("Euclidean Error");
-plot(Measurement, ErrEuclid*100);
+h = plot(Measurement, ErrEuclid, 'rx');
+set(h, 'linewidth', 1.5);
 xlabel("Measurement");
 ylabel("Error [mm]");
 legend("Error between input and measured output");
@@ -76,7 +79,7 @@ xlabel("Measurement");
 ylabel("Length of rope [mm]");
 legend("Motor1", "Motor2", "Motor3", 'Location' ,'best');
 
-% Vector between measurement and anchor Position
+%% Vector between measurement and anchor Position
 Dist1Meas = Meas - AnchorPos1;
 Dist2Meas = Meas - AnchorPos2;
 Dist3Meas = Meas - AnchorPos3;
@@ -97,17 +100,22 @@ xlabel("Measurement");
 ylabel("Length of rope [mm]");
 legend("Motor1", "Motor2", "Motor3", 'Location' ,'best');
 
-% Error in spooling of the motors
+%% Error in spooling of the motors
 ErrLength1 = OutputLength1 - InputLength1;
 ErrLength2 = OutputLength2 - InputLength2;
 ErrLength3 = OutputLength3 - InputLength3;
 
 % Plot
-figure;
+f = figure;
+set(f, 'Units', 'normalized', 'Position', [0.2, 0.2, 0.6, 0.4]); 
+ylim([-40 40]);
 hold on;
-plot(Measurement, ErrLength1);
-plot(Measurement, ErrLength2);
-plot(Measurement, ErrLength3);
+h = plot(Measurement, ErrLength1, 'rx');
+set(h, 'linewidth', 1.5);
+h = plot(Measurement, ErrLength2, 'mx');
+set(h, 'linewidth', 1.5);
+h = plot(Measurement, ErrLength3, 'kx');
+set(h, 'linewidth', 1.5);
 title("Error in spoolng");
 xlabel("Measurement");
 ylabel("Error [mm]");

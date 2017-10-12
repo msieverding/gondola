@@ -29,32 +29,39 @@ clearvars data raw;
 close all;
 
 %% Plot Error against length
-figure;
+f = figure;
+ylim([-100 350]);
+set(f, 'Units', 'normalized', 'Position', [0.2, 0.2, 0.3, 0.4]); 
 hold on;
-plot(Length, Err, 'rx');
+h = plot(Length, Err, 'rx');
+set(h, 'linewidth', 1.5);
 title("Error against input length");
 xlabel("Input length [mm]");
 ylabel("Error [mm]");
-legend("Error without correction", 'Location' ,'best');
+legend("Error", 'Location' ,'best');
 
 %% Linear Regression of Error dependent on spooled length
 % Lineare regression des fehlers auf Basis der abgespulten länge.
 % Gemessen wurde immer bis zum weißen Kunststoff beim Motor um über alle
 % Längen eine Aussage zu haben. Vorher wurde bis zum Haken mit Offset von
 % etwa 1,3 Meter gemessen. Das führt natürlich zu Verfälschungen.
-figure;
+f = figure;
+ylim([-100 350]);
+set(f, 'Units', 'normalized', 'Position', [0.2, 0.2, 0.3, 0.4]); 
 hold on;
 x = Length./10;    % calc in cm
 y = Err./10;      % calc in cm
 %X = [ones(length(x), 1) x];
 m = x\y; % least squares regression % attention: these are mm not cm!
 ErrRegression = x * m;              % estimated error 
-plot(x.*10, y.*10, 'rx');
-plot(x.*10, ErrRegression.*10, 'g-');
+h = plot(x.*10, y.*10, 'rx');
+set(h, 'linewidth', 1.5);
+h = plot(x.*10, ErrRegression.*10, 'g-');
+set(h, 'linewidth', 1.5);
 title("Linear regression of error");
 xlabel("Input length [mm]");
 ylabel("Error [mm]");
-legend("error", "estimation of error", 'Location' ,'best');
+legend("Error", "Linear error estimation", 'Location' ,'best');
 % Ergebnis: Eine gerade erzeugt in gewissen bereichen (unten und oben) doch
 % einen recht großen Fehler. Dadruch, dass dich das Seil zu einem Berg
 % aufwickelt nimmt die Fehleränderungen mit weiterem spulen ab.
@@ -62,19 +69,23 @@ legend("error", "estimation of error", 'Location' ,'best');
 %% Quadratic regression of Error dependend on spooled length
 % -> used for next experiment
 format long;
-figure;
+f = figure;
+ylim([-100 350]);
+set(f, 'Units', 'normalized', 'Position', [0.2, 0.2, 0.3, 0.4]); 
 hold on;
 x = Length ./ 10; %calc in cm
 y = Err ./ 10;    %calc in cm
 p = polyfit(x,y,2)
 x_cont = 0:1:max(x);
 ErrRegression = polyval(p,x_cont);
-plot(x.*10, y.*10, 'rx');
-plot(x_cont.*10, ErrRegression.*10, 'g-');
+h = plot(x.*10, y.*10, 'rx');
+set(h, 'linewidth', 1.5);
+h = plot(x_cont.*10, ErrRegression.*10, 'g-');
+set(h, 'linewidth', 1.5);
 title("Quadratic polynomal fit of error with spooled rope");
 xlabel("Input length [mm]");
 ylabel("Error [mm]");
-legend("error", "estimation of error", 'Location' ,'best');
+legend("Error", "Quadratic polynomial estimation of error", 'Location' ,'best');
 % Näherung sieht sehr gut aus. Lediglich landet 0 nicht bei 0. Der Fehler
 % ist aber recht klein. Man könnten von 0 is 1 Meter den Fehler noch Linear
 % genauer regressieren, wenn man in dem Bereich arbeiten möchte.
