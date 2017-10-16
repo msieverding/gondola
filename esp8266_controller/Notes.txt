@@ -1,5 +1,4 @@
 TODO:
-- calc and check system boundaries with anchor positions and check them before movement
 - check all TODOs
 - implement state for SW LED
 - find issues with asynchronous mode
