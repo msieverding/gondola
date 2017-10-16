@@ -34,7 +34,7 @@ data2 = reshape([raw2{:}],size(raw2));
 Measurement = [data(:,1) data2(:,1)];
 Weight = [data(:,2) data2(:,2)];           % gramm
 g = 9.81;                                   % acceleration
-Force = Weight * g / 100;                   % resulting force
+Force = Weight * g / 1000;                   % resulting force
 MeasX = [data(:,3) data2(:,3)];            % Measurement
 X = [data(:,4) data2(:,4)];                % X-Position
 Extension = [data(:,5) data2(:,5)];         % Extnsion due to force
@@ -47,11 +47,10 @@ clearvars data data2 raw raw2 R R2;
 f = figure;
 set(f, 'Units', 'normalized', 'Position', [0.2, 0.2, 0.3, 0.4]);
 hold on;
-h = plot(Measurement(:,1), Extension(:,1), 'rx');
+h = plot(Force(:,1), Extension(:,1), 'r');
 set(h, 'linewidth', 1.5);
-h = plot(Measurement(:,2), Extension(:,2), 'mx');
+h = plot(Force(:,2), Extension(:,2), 'm');
 set(h, 'linewidth', 1.5);
-% TODO replace plot(Weight, Extension);
 title("Error relating to tension of the rope with different initial rope length");
 xlabel("Force [N]");
 ylabel("Extension [mm]");
