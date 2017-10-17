@@ -44,10 +44,17 @@ public:
 
   /**
    * Unequality operator
-   * @param  c s econd coordinate
+   * @param  c  second coordinate
    * @return    unequality
    */
   bool operator!=(Coordinate const& c);
+
+  /**
+   * Addition
+   * @param  c  second coordinate
+   * @return    unequality
+   */
+  Coordinate operator+(Coordinate const& c);
 
   /**
    * Calculate euclidean distance of two coordinates

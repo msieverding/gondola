@@ -5,6 +5,7 @@
 #include <list>
 #include "Coordinate.hpp"
 #include "ESP8266WebServer.h"
+#include "Gondola.hpp"
 // TODO Doc
 
 typedef enum : byte {
@@ -26,7 +27,7 @@ typedef struct {
   bool connected;
 } RSSIClientData_t;
 
-typedef enum rssiMeasState_e : byte {
+typedef enum rssiMeasRandomWalkState_e : byte {
   STATE_INIT,
   STATE_START,
   STATE_DIR_ZN,
@@ -36,7 +37,18 @@ typedef enum rssiMeasState_e : byte {
   STATE_WAIT,
   STATE_MOVE_AND_MEAS,
   STATE_MEAS
-} rssiMeasState_t;
+} rssiMeasRandomWalkState_t;
+
+typedef enum rssiMeasSampleWalkState_e : byte {
+  STATE_SAMPLE_INIT,
+  STATE_SAMPLE1,
+  STATE_SAMPLE_EVA_1,
+  STATE_SAMPLE2,
+  STATE_SAMPLE_EVA_2,
+  STATE_SAMPLE_MOVE_AND_MEAS,
+  STATE_SAMPLE_MEAS,
+  STATE_SAMPLE_FIN
+} rssiMeasSampleWalkState_t;
 
 class ApplicationRSSIMeasServer
 {
@@ -54,15 +66,27 @@ private:
   void initiateMeasurement();
   bool appStartCommand(std::string &s);
   bool appStopCommand(std::string &s);
+  void randomWalk(Gondola *gondola, float speed);
+  void sampleWalk(Gondola *gondola, float speed);
 
   uint16_t                        m_Port;
   WebSocketsServer                m_WebSocketServer;  //!< Server from WebSocketsLibrary
   std::list<RSSIClientData_t>     m_ClientList;
   uint32_t                        m_NextPing;
-  int32_t                         m_LastMeasurement[2];
-  rssiMeasState_t                 m_State;
-  rssiMeasState_t                 m_NextState;
   uint32_t                        m_NextStart;
+
+  // Random Walk
+  int32_t                         m_LastMeasurement[2];
+  rssiMeasRandomWalkState_t       m_RandomWalkState;
+  rssiMeasRandomWalkState_t       m_NextRandomWalkState;
+
+  // SampleWalk
+  int32_t                         m_SampleWalkMeasurements[3];
+  uint8_t                         m_SampleWalkSample;
+  rssiMeasSampleWalkState_t       m_SampleWalkState;
+  rssiMeasSampleWalkState_t       m_NextSampleWalkState;
+  uint8_t                         m_SampleWalkMax[2];
+
 };
 
 #endif /* _APPLICATION_RSSI_MEAS_SERVER_HPP_ */

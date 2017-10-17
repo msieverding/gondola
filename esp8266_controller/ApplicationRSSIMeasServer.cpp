@@ -13,12 +13,16 @@ ApplicationRSSIMeasServer::ApplicationRSSIMeasServer(uint16_t port)
  , m_WebSocketServer(m_Port)
  , m_ClientList()
  , m_NextPing(0)
- , m_LastMeasurement()
- , m_State(STATE_INIT)
- , m_NextState(STATE_INIT)
  , m_NextStart(0)
+ , m_LastMeasurement()
+ , m_RandomWalkState(STATE_INIT)
+ , m_NextRandomWalkState(STATE_INIT)
+ , m_SampleWalkMeasurements()
+ , m_SampleWalkSample(0)
+ , m_SampleWalkState(STATE_SAMPLE_INIT)
 {
   m_LastMeasurement[0] = m_LastMeasurement[1] = 0x80000000; // INT_MIN
+
   logDebug("Start Application RSSIMeasServer with WebSocket on port %d\n", m_Port);
 #if (WEBSOCKETS_NETWORK_TYPE == NETWORK_ESP8266_ASYNC)
   logDebug("WebSocketServer runs in asynchronous mode!\n");
@@ -64,140 +68,9 @@ void ApplicationRSSIMeasServer::loop()
   }
 
   Gondola *gondola = ApplicationInterface::get()->getGondola();
-  float speed = 5.0f;
 
-  switch(m_State)
-  {
-    case STATE_START:
-    {
-      if (!gondola->isIdle())
-        break; // movement not finished
-
-      logDebug("State init\n");
-      Coordinate startPos = gondola->getCurrentPosition();
-      // Go to defined height
-      startPos.x = 40;
-      gondola->setTargetPosition(startPos, speed);
-      m_State = STATE_MOVE_AND_MEAS;
-      // m_NextState = STATE_DIR_ZN;
-      m_NextState = STATE_DIR_YN;
-      break;
-    }
-
-    case STATE_DIR_ZN:
-    {
-      logDebug("State dir z- %d - %d\n", m_LastMeasurement[1], m_LastMeasurement[0]);
-      // Value gets worse (more negative)
-      if ((m_LastMeasurement[1] > m_LastMeasurement[0]) && (m_LastMeasurement[1] != (int32_t)0x80000000))
-      {
-        // rewert last step
-        Coordinate newPos(gondola->getCurrentPosition());
-        newPos.z += 20;
-        gondola->setTargetPosition(newPos, speed);
-        m_State = STATE_MOVE_AND_MEAS;
-        m_NextState = STATE_DIR_ZP;
-        m_LastMeasurement[0] = m_LastMeasurement[1] = 0x80000000;
-        break;
-      }
-      Coordinate newPos(gondola->getCurrentPosition());
-      newPos.z -= 20;
-      gondola->setTargetPosition(newPos, speed);
-      m_State = STATE_MOVE_AND_MEAS;
-      m_NextState = STATE_DIR_ZN;
-      break;
-    }
-
-    case STATE_DIR_ZP:
-    {
-      logDebug("State dir z+ %d - %d\n", m_LastMeasurement[1], m_LastMeasurement[0]);
-      // Value gets worse (more negative)
-      if (m_LastMeasurement[1] > m_LastMeasurement[0] && (m_LastMeasurement[1] != (int32_t)0x80000000))
-      {
-        // rewert step
-        Coordinate newPos(gondola->getCurrentPosition());
-        newPos.z -= 20;
-        gondola->setTargetPosition(newPos, speed);
-        m_State = STATE_MOVE_AND_MEAS;
-        m_NextState = STATE_DIR_YN;
-        m_LastMeasurement[0] = m_LastMeasurement[1] = 0x80000000;
-        break;
-      }
-      Coordinate newPos(gondola->getCurrentPosition());
-      newPos.z += 20;
-      gondola->setTargetPosition(newPos, speed);
-      m_State = STATE_MOVE_AND_MEAS;
-      m_NextState = STATE_DIR_ZP;
-      break;
-    }
-
-    case STATE_DIR_YN:
-    {
-      logDebug("State dir y- %d - %d\n", m_LastMeasurement[1], m_LastMeasurement[0]);
-      // Value gets worse (more negative)
-      if ((m_LastMeasurement[1] > m_LastMeasurement[0]) && (m_LastMeasurement[1] != (int32_t)0x80000000))
-      {
-        Coordinate newPos(gondola->getCurrentPosition());
-        newPos.y += 10;
-        gondola->setTargetPosition(newPos, speed);
-        m_State = STATE_MOVE_AND_MEAS;
-        m_NextState = STATE_DIR_YP;
-        m_LastMeasurement[0] = m_LastMeasurement[1] = 0x80000000;
-        break;
-      }
-      Coordinate newPos(gondola->getCurrentPosition());
-      newPos.y -= 10;
-      gondola->setTargetPosition(newPos, speed);
-      m_State = STATE_MOVE_AND_MEAS;
-      m_NextState = STATE_DIR_YN;
-      break;
-    }
-
-    case STATE_DIR_YP:
-    {
-      logDebug("State dir y+ %d - %d\n", m_LastMeasurement[1], m_LastMeasurement[0]);
-      // Value gets worse (more negative)
-      if (m_LastMeasurement[1] > m_LastMeasurement[0] && (m_LastMeasurement[1] != (int32_t)0x80000000))
-      {
-        // rewert step
-        Coordinate newPos(gondola->getCurrentPosition());
-        newPos.y -= 10;
-        gondola->setTargetPosition(newPos, speed);
-        m_State = STATE_MOVE_AND_MEAS;
-        m_NextState = STATE_WAIT;
-        m_NextStart = millis() + 10000;
-        m_LastMeasurement[0] = m_LastMeasurement[1] = 0x80000000;
-        break;
-      }
-      Coordinate newPos(gondola->getCurrentPosition());
-      newPos.y += 10;
-      gondola->setTargetPosition(newPos, speed);
-      m_State = STATE_MOVE_AND_MEAS;
-      m_NextState = STATE_DIR_YP;
-      break;
-    }
-
-    case STATE_MOVE_AND_MEAS:
-    {
-      if (!gondola->isIdle())
-        break; // movement not finished
-
-      m_State = STATE_MEAS;
-      initiateMeasurement();
-      break;
-    }
-
-    case STATE_WAIT:
-        if (millis() > m_NextStart)
-        {
-          m_LastMeasurement[0] = m_LastMeasurement[1] = 0x80000000;
-          m_State = STATE_MOVE_AND_MEAS;
-          m_NextState = STATE_DIR_YN;
-        }
-      break;
-
-    default:
-      break;
-  }
+  // randomWalk(gondola, 5.0);
+  sampleWalk(gondola, 5.0);
 
 #if (WEBSOCKETS_NETWORK_TYPE != NETWORK_ESP8266_ASYNC)
   m_WebSocketServer.loop();
@@ -222,7 +95,7 @@ void ApplicationRSSIMeasServer::webSocketEvent(uint8_t num, WStype_t type, uint8
     logDebug("[APP RSSIMeas][%u] Connected from %d.%d.%d.%d url: %s\n", num, ip[0], ip[1], ip[2], ip[3], payload);
 		// send message back to client
 		m_WebSocketServer.sendTXT(num, "[APP RSSIMeas] Connected");
-    m_State = STATE_INIT;
+    m_RandomWalkState = STATE_INIT;
   }
   break;
 
@@ -284,11 +157,22 @@ void ApplicationRSSIMeasServer::webSocketEvent(uint8_t num, WStype_t type, uint8
             clientData->measurementList.pop_front();
           }
         }
+        // Random walk
         m_LastMeasurement[1] = m_LastMeasurement[0];
         m_LastMeasurement[0] = rssi;
 
-        if (m_State == STATE_MEAS)
-          m_State = m_NextState;
+        if (m_RandomWalkState == STATE_MEAS)
+          m_RandomWalkState = m_NextRandomWalkState;
+
+        // sample walk
+        if (m_SampleWalkState == STATE_SAMPLE_MEAS)
+        {
+          m_SampleWalkMeasurements[m_SampleWalkSample] = rssi;
+          m_SampleWalkSample++;
+          m_SampleWalkState = m_NextSampleWalkState;
+        }
+
+        // ///////
         break;
       }
 
@@ -364,13 +248,239 @@ void ApplicationRSSIMeasServer::initiateMeasurement()
 
 bool ApplicationRSSIMeasServer::appStartCommand(std::string &s)
 {
-  m_State = STATE_START;
+  m_RandomWalkState = STATE_START;
+  m_SampleWalkState = STATE_SAMPLE1;
   m_LastMeasurement[0] = m_LastMeasurement[1] = 0x80000000;
   return true;
 }
 
 bool ApplicationRSSIMeasServer::appStopCommand(std::string &s)
 {
-  m_State = STATE_INIT;
+  m_RandomWalkState = STATE_INIT;
+  m_SampleWalkState = STATE_SAMPLE_INIT;
   return true;
+}
+
+void ApplicationRSSIMeasServer::randomWalk(Gondola *gondola, float speed)
+{
+  switch(m_RandomWalkState)
+  {
+    case STATE_START:
+    {
+      if (!gondola->isIdle())
+        break; // movement not finished
+
+      logDebug("State init\n");
+      Coordinate startPos = gondola->getCurrentPosition();
+      // Go to defined height
+      startPos.x = 40;
+      gondola->setTargetPosition(startPos, speed);
+      m_RandomWalkState = STATE_MOVE_AND_MEAS;
+      // m_NextRandomWalkState = STATE_DIR_ZN;
+      m_NextRandomWalkState = STATE_DIR_YN;
+      break;
+    }
+
+    case STATE_DIR_ZN:
+    {
+      logDebug("State dir z- %d - %d\n", m_LastMeasurement[1], m_LastMeasurement[0]);
+      // Value gets worse (more negative)
+      if ((m_LastMeasurement[1] > m_LastMeasurement[0]) && (m_LastMeasurement[1] != (int32_t)0x80000000))
+      {
+        // rewert last step
+        Coordinate newPos(gondola->getCurrentPosition());
+        newPos.z += 20;
+        gondola->setTargetPosition(newPos, speed);
+        m_RandomWalkState = STATE_MOVE_AND_MEAS;
+        m_NextRandomWalkState = STATE_DIR_ZP;
+        m_LastMeasurement[0] = m_LastMeasurement[1] = 0x80000000;
+        break;
+      }
+      Coordinate newPos(gondola->getCurrentPosition());
+      newPos.z -= 20;
+      gondola->setTargetPosition(newPos, speed);
+      m_RandomWalkState = STATE_MOVE_AND_MEAS;
+      m_NextRandomWalkState = STATE_DIR_ZN;
+      break;
+    }
+
+    case STATE_DIR_ZP:
+    {
+      logDebug("State dir z+ %d - %d\n", m_LastMeasurement[1], m_LastMeasurement[0]);
+      // Value gets worse (more negative)
+      if (m_LastMeasurement[1] > m_LastMeasurement[0] && (m_LastMeasurement[1] != (int32_t)0x80000000))
+      {
+        // rewert step
+        Coordinate newPos(gondola->getCurrentPosition());
+        newPos.z -= 20;
+        gondola->setTargetPosition(newPos, speed);
+        m_RandomWalkState = STATE_MOVE_AND_MEAS;
+        m_NextRandomWalkState = STATE_DIR_YN;
+        m_LastMeasurement[0] = m_LastMeasurement[1] = 0x80000000;
+        break;
+      }
+      Coordinate newPos(gondola->getCurrentPosition());
+      newPos.z += 20;
+      gondola->setTargetPosition(newPos, speed);
+      m_RandomWalkState = STATE_MOVE_AND_MEAS;
+      m_NextRandomWalkState = STATE_DIR_ZP;
+      break;
+    }
+
+    case STATE_DIR_YN:
+    {
+      logDebug("State dir y- %d - %d\n", m_LastMeasurement[1], m_LastMeasurement[0]);
+      // Value gets worse (more negative)
+      if ((m_LastMeasurement[1] > m_LastMeasurement[0]) && (m_LastMeasurement[1] != (int32_t)0x80000000))
+      {
+        Coordinate newPos(gondola->getCurrentPosition());
+        newPos.y += 10;
+        gondola->setTargetPosition(newPos, speed);
+        m_RandomWalkState = STATE_MOVE_AND_MEAS;
+        m_NextRandomWalkState = STATE_DIR_YP;
+        m_LastMeasurement[0] = m_LastMeasurement[1] = 0x80000000;
+        break;
+      }
+      Coordinate newPos(gondola->getCurrentPosition());
+      newPos.y -= 10;
+      gondola->setTargetPosition(newPos, speed);
+      m_RandomWalkState = STATE_MOVE_AND_MEAS;
+      m_NextRandomWalkState = STATE_DIR_YN;
+      break;
+    }
+
+    case STATE_DIR_YP:
+    {
+      logDebug("State dir y+ %d - %d\n", m_LastMeasurement[1], m_LastMeasurement[0]);
+      // Value gets worse (more negative)
+      if (m_LastMeasurement[1] > m_LastMeasurement[0] && (m_LastMeasurement[1] != (int32_t)0x80000000))
+      {
+        // rewert step
+        Coordinate newPos(gondola->getCurrentPosition());
+        newPos.y -= 10;
+        gondola->setTargetPosition(newPos, speed);
+        m_RandomWalkState = STATE_MOVE_AND_MEAS;
+        m_NextRandomWalkState = STATE_WAIT;
+        m_NextStart = millis() + 10000;
+        m_LastMeasurement[0] = m_LastMeasurement[1] = 0x80000000;
+        break;
+      }
+      Coordinate newPos(gondola->getCurrentPosition());
+      newPos.y += 10;
+      gondola->setTargetPosition(newPos, speed);
+      m_RandomWalkState = STATE_MOVE_AND_MEAS;
+      m_NextRandomWalkState = STATE_DIR_YP;
+      break;
+    }
+
+    case STATE_MOVE_AND_MEAS:
+    {
+      if (!gondola->isIdle())
+        break; // movement not finished
+
+      m_RandomWalkState = STATE_MEAS;
+      initiateMeasurement();
+      break;
+    }
+
+    case STATE_WAIT:
+        if (millis() > m_NextStart)
+        {
+          m_LastMeasurement[0] = m_LastMeasurement[1] = 0x80000000;
+          m_RandomWalkState = STATE_MOVE_AND_MEAS;
+          m_NextRandomWalkState = STATE_DIR_YN;
+        }
+      break;
+
+    default:
+      break;
+  }
+}
+
+void ApplicationRSSIMeasServer::sampleWalk(Gondola *gondola, float speed)
+{
+  static Coordinate targetPos[3] = {{40, 50, 0}, {40, 150, 0}, {40, 250, 0}};
+  static Coordinate secondGrid[3] = {{0, -25, 0}, {0, 0, 0}, {0, 25, 0}};
+  static Coordinate bestCoord;
+
+  switch(m_SampleWalkState)
+  {
+    case STATE_SAMPLE1:
+      gondola->setTargetPosition(targetPos[m_SampleWalkSample], speed);
+
+      m_SampleWalkState = STATE_SAMPLE_MOVE_AND_MEAS;
+      if (m_SampleWalkSample == 2)
+        m_NextSampleWalkState = STATE_SAMPLE_EVA_1;
+      else
+        m_NextSampleWalkState = STATE_SAMPLE1;
+      break;
+
+    case STATE_SAMPLE_EVA_1:
+      {
+        // calc best measurement
+        int32_t min = std::max(m_SampleWalkMeasurements[0], m_SampleWalkMeasurements[1]);
+        min = std::max(min, m_SampleWalkMeasurements[2]);
+
+        // save index
+        if (m_SampleWalkMeasurements[0] == min)
+          bestCoord = targetPos[0];
+        if (m_SampleWalkMeasurements[1] == min)
+          bestCoord = targetPos[1];
+        if (m_SampleWalkMeasurements[2] == min)
+          bestCoord = targetPos[2];
+
+        m_SampleWalkSample = 0;
+        m_SampleWalkState = STATE_SAMPLE2;
+        break;
+      }
+
+    case STATE_SAMPLE2:
+      {
+        Coordinate targetPos2 = bestCoord;
+        targetPos2 = targetPos2 + secondGrid[m_SampleWalkSample];
+        gondola->setTargetPosition(targetPos2, speed);
+
+        m_SampleWalkState = STATE_SAMPLE_MOVE_AND_MEAS;
+        if (m_SampleWalkSample == 2)
+          m_NextSampleWalkState = STATE_SAMPLE_EVA_2;
+        else
+          m_NextSampleWalkState = STATE_SAMPLE2;
+        break;
+      }
+
+    case STATE_SAMPLE_EVA_2:
+      {
+        // calc best measurement
+        int32_t min = std::max(m_SampleWalkMeasurements[0], m_SampleWalkMeasurements[1]);
+        min = std::max(min, m_SampleWalkMeasurements[2]);
+
+        // save index
+        if (m_SampleWalkMeasurements[0] == min)
+          bestCoord = bestCoord + secondGrid[0];
+        if (m_SampleWalkMeasurements[1] == min)
+          bestCoord = bestCoord + secondGrid[1];
+        if (m_SampleWalkMeasurements[2] == min)
+          bestCoord = bestCoord + secondGrid[2];
+
+        gondola->setTargetPosition(bestCoord, speed);
+
+        m_SampleWalkSample = 0;
+        m_SampleWalkState = STATE_SAMPLE_FIN;
+        break;
+      }
+
+    case STATE_SAMPLE_MOVE_AND_MEAS:
+      if (!gondola->isIdle())
+        break; // movement not finished
+
+      m_SampleWalkState = STATE_SAMPLE_MEAS;
+      initiateMeasurement();
+      break;
+
+    case STATE_SAMPLE_FIN:
+      break;
+
+    default:
+      break;
+  }
 }
