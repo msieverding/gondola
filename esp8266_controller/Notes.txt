@@ -1,7 +1,8 @@
 TODO:
 - check all TODOs
 - implement state for SW LED
-- find issues with asynchronous mode
+- test button
+
 
 Ideas:
 - Use NTP for a time (maybe good for debug output, etc..). NTP is used here (https://github.com/Azure/azure-iot-arduino-protocol-http/blob/master/examples/simplesample_http/simplesample_http.ino)
@@ -32,3 +33,4 @@ Used libraries:
 Usefull sources:
 - Linear regression: https://de.mathworks.com/help/matlab/data_analysis/linear-regression.html
 - Paper about movement to optimize things: https://repository.tudelft.nl/islandora/object/uuid:aaecae50-6b30-40c3-accf-53302d200656/datastream/OBJ
+- Exception decoder https://github.com/me-no-dev/EspExceptionDecoder

@@ -13,7 +13,6 @@
 #include "ApplicationRSSIMeasServer.hpp"
 #include "ApplicationRSSIMeasClient.hpp"
 
-
 IConnection *serial;
 
 ApplicationRSSIMeasServer *RSSIServer;
@@ -33,7 +32,7 @@ void setup()
   wdt_enable(1000);
   // ESP.wdtEnable(1000);
 
-  RSSIServer = new ApplicationRSSIMeasServer(440);
+  // RSSIServer = new ApplicationRSSIMeasServer(440);
   // RSSIClient = new ApplicationRSSIMeasClient(Config::get()->getWSO_HOST(), 440);
 }
 

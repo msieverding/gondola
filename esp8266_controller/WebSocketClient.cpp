@@ -8,6 +8,8 @@ WebSocketClient::WebSocketClient(std::string host, uint16_t port)
  , m_Port(port)
  , m_WebSocketClient()
  , m_Anchor(0)    // NO ID necessary in client
+ , m_NextPing(0)
+ , m_Connected(false)
 {
   logDebug("Start WebSocketClient and connect to '%s:%d'\n", m_Host.c_str(), m_Port);
 #if (WEBSOCKETS_NETWORK_TYPE == NETWORK_ESP8266_ASYNC)
@@ -37,6 +39,21 @@ WebSocketClient::~WebSocketClient()
 
 void WebSocketClient::loop()
 {
+  // Ping server to detect timeouts. See issue: https://github.com/Links2004/arduinoWebSockets/issues/203
+  if (m_Connected && millis() > m_NextPing)
+  {
+    if (m_WebSocketClient.sendPing() == false)
+    {
+      logWarning("Detected connection loss to server. Force disconnect.\n");
+      m_WebSocketClient.disconnect();
+#if (WEBSOCKETS_NETWORK_TYPE == NETWORK_ESP8266_ASYNC)
+      // Manual fired disconnect event is needed in async mode
+      webSocketEvent(WStype_DISCONNECTED, NULL, 0);
+#endif
+    }
+    m_NextPing = millis() + 1000;
+  }
+
 #if (WEBSOCKETS_NETWORK_TYPE != NETWORK_ESP8266_ASYNC)
   m_WebSocketClient.loop();
 #endif
@@ -48,11 +65,20 @@ void WebSocketClient::webSocketEvent(WStype_t type, uint8_t * payload, size_t le
   switch(type)
   {
 		case WStype_DISCONNECTED:
+      m_Connected = false;
 			logDebug("[WSc] Disconnected!\n");
 			break;
 
 		case WStype_CONNECTED:
     {
+      // TODO find the real proble with the asynchronous mode..
+      if (m_Connected == true)
+      {
+        // In asynchronous mode this could happen. Don't know why
+        // Ignore a second connect
+        return;
+      }
+      m_Connected = true;
 			logDebug("[WSc] Connected to url: %s\n", payload);
 
 			// send message to server when Connected

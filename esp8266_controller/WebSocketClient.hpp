@@ -48,6 +48,8 @@ private:
   uint16_t                m_Port;                     //!< WebSocket port
   WebSocketsClient        m_WebSocketClient;          //!< Client instance of WebSocketsLibrary
   HardwareAnchor          m_Anchor;                   //!< Hardware anchor
+  uint32_t                m_NextPing;                 //!< Next time to ping server
+  bool                    m_Connected;                //!< websocket connection estalished
 };
 
 #endif /* _WEB_SOCKET_CLIENT_HPP_ */
