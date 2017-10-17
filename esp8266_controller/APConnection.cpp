@@ -2,6 +2,11 @@
 #include "config.hpp"
 #include "Log.hpp"
 
+extern "C"
+{
+	#include "user_interface.h"
+};
+
 APConnection::APConnection(std::string ssid, std::string passphrase, IPAddress ip, IPAddress gateway, IPAddress netmask, std::string url)
  : m_SSID(ssid)
  , m_Passphrase(passphrase)
@@ -17,6 +22,12 @@ APConnection::APConnection(std::string ssid, std::string passphrase, IPAddress i
 
   logInfo("Setting Soft-AP configuration... ");
   logInfo(WiFi.softAPConfig(m_IPAddress, m_Gateway, m_Netmask) ? "Ready\n" : "Failed!\n");
+
+  // Set maximum clients to 8
+  struct softap_config config;
+  wifi_softap_get_config(&config);    // Get config first.
+  config.max_connection = 8;          // how many stations can connect to ESP8266 softAP at most.
+  wifi_softap_set_config(&config);    // Set ESP8266 softap config
 
   logInfo("Setting Soft-AP... ");
   if (m_Passphrase.length() >= 8 && m_Passphrase.length() <= 63)

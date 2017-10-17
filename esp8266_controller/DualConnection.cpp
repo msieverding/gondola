@@ -4,6 +4,11 @@
 #include <functional>
 #include "ConnectionMgr.hpp"
 
+extern "C"
+{
+	#include "user_interface.h"
+};
+
 #define WIFI_CONNECTION_RETRIES   20
 
 DualConnection::DualConnection(std::string ap_ssid, std::string ap_pw, IPAddress ap_ip, IPAddress ap_gw, IPAddress ap_nm, std::string ap_url,
@@ -83,6 +88,12 @@ void DualConnection::setupAccessPoint()
 {
   logInfo("Setting Soft-AP configuration... ");
   logInfo(WiFi.softAPConfig(m_AP_IPAddress, m_AP_Gateway, m_AP_Netmask) ? "Ready\n" : "Failed!\n");
+
+  // Set maximum clients to 8
+  struct softap_config config;
+  wifi_softap_get_config(&config);    // Get config first.
+  config.max_connection = 8;          // how many stations can connect to ESP8266 softAP at most.
+  wifi_softap_set_config(&config);    // Set ESP8266 softap config
 
   logInfo("Setting Soft-AP... ");
   if (m_AP_Passphrase.length() >= 8 && m_AP_Passphrase.length() <= 63)
