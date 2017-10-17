@@ -20,6 +20,8 @@ private:
   uint16_t                m_Port;                     //!< WebSocket port
   WebSocketsClient        m_WebSocketClient;          //!< Client instance of WebSocketsLibrary
   uint32_t                m_NextMeasTime;
+  int32_t                 m_Measurements[20];
+  uint8_t                 m_Measurement;
 };
 
 #endif /* _APPLICATION_RSSI_MEAS_CLIENT_HPP_ */

@@ -27,13 +27,13 @@ typedef struct {
 } RSSIClientData_t;
 
 typedef enum rssiMeasState_e : byte {
-  STATE_CONNECT,
   STATE_INIT,
+  STATE_START,
   STATE_DIR_ZN,
   STATE_DIR_ZP,
   STATE_DIR_YN,
   STATE_DIR_YP,
-  STATE_FIN,
+  STATE_WAIT,
   STATE_MOVE_AND_MEAS,
   STATE_MEAS
 } rssiMeasState_t;
@@ -52,6 +52,8 @@ private:
   RSSIClientData_t *getClientData(uint8_t* mac);
   bool printClientData(std::string &s);
   void initiateMeasurement();
+  bool appStartCommand(std::string &s);
+  bool appStopCommand(std::string &s);
 
   uint16_t                        m_Port;
   WebSocketsServer                m_WebSocketServer;  //!< Server from WebSocketsLibrary
@@ -60,6 +62,7 @@ private:
   int32_t                         m_LastMeasurement[2];
   rssiMeasState_t                 m_State;
   rssiMeasState_t                 m_NextState;
+  uint32_t                        m_NextStart;
 };
 
 #endif /* _APPLICATION_RSSI_MEAS_SERVER_HPP_ */

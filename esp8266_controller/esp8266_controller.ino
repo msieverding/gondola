@@ -33,7 +33,7 @@ void setup()
   // ESP.wdtEnable(1000);
 
   // RSSIServer = new ApplicationRSSIMeasServer(440);
-  // RSSIClient = new ApplicationRSSIMeasClient(Config::get()->getWSO_HOST(), 440);
+  RSSIClient = new ApplicationRSSIMeasClient(Config::get()->getWSO_HOST(), 440);
 }
 
 void loop()

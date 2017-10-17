@@ -14,8 +14,9 @@ ApplicationRSSIMeasServer::ApplicationRSSIMeasServer(uint16_t port)
  , m_ClientList()
  , m_NextPing(0)
  , m_LastMeasurement()
- , m_State(STATE_CONNECT)
- , m_NextState(STATE_CONNECT)
+ , m_State(STATE_INIT)
+ , m_NextState(STATE_INIT)
+ , m_NextStart(0)
 {
   m_LastMeasurement[0] = m_LastMeasurement[1] = 0x80000000; // INT_MIN
   logDebug("Start Application RSSIMeasServer with WebSocket on port %d\n", m_Port);
@@ -26,11 +27,15 @@ ApplicationRSSIMeasServer::ApplicationRSSIMeasServer(uint16_t port)
   m_WebSocketServer.onEvent(std::bind(&ApplicationRSSIMeasServer::webSocketEvent, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
 
   CommandInterpreter::get()->addCommand("appPrint", std::bind(&ApplicationRSSIMeasServer::printClientData, this, std::placeholders::_1));
+  CommandInterpreter::get()->addCommand("appStart", std::bind(&ApplicationRSSIMeasServer::appStartCommand, this, std::placeholders::_1));
+  CommandInterpreter::get()->addCommand("appStop", std::bind(&ApplicationRSSIMeasServer::appStopCommand, this, std::placeholders::_1));
 }
 
 ApplicationRSSIMeasServer::~ApplicationRSSIMeasServer()
 {
   CommandInterpreter::get()->deleteCommand("appPrint");
+  CommandInterpreter::get()->deleteCommand("appStart");
+  CommandInterpreter::get()->deleteCommand("appStop");
 }
 
 void ApplicationRSSIMeasServer::loop()
@@ -59,20 +64,23 @@ void ApplicationRSSIMeasServer::loop()
   }
 
   Gondola *gondola = ApplicationInterface::get()->getGondola();
-  float speed = 10.0f;
+  float speed = 5.0f;
 
   switch(m_State)
   {
-    case STATE_INIT:
+    case STATE_START:
     {
       if (!gondola->isIdle())
         break; // movement not finished
 
       logDebug("State init\n");
-      Coordinate startPos(40, 160, 30);
+      Coordinate startPos = gondola->getCurrentPosition();
+      // Go to defined height
+      startPos.x = 40;
       gondola->setTargetPosition(startPos, speed);
       m_State = STATE_MOVE_AND_MEAS;
-      m_NextState = STATE_DIR_ZN;
+      // m_NextState = STATE_DIR_ZN;
+      m_NextState = STATE_DIR_YN;
       break;
     }
 
@@ -129,7 +137,7 @@ void ApplicationRSSIMeasServer::loop()
       if ((m_LastMeasurement[1] > m_LastMeasurement[0]) && (m_LastMeasurement[1] != (int32_t)0x80000000))
       {
         Coordinate newPos(gondola->getCurrentPosition());
-        newPos.y += 20;
+        newPos.y += 10;
         gondola->setTargetPosition(newPos, speed);
         m_State = STATE_MOVE_AND_MEAS;
         m_NextState = STATE_DIR_YP;
@@ -137,7 +145,7 @@ void ApplicationRSSIMeasServer::loop()
         break;
       }
       Coordinate newPos(gondola->getCurrentPosition());
-      newPos.y -= 20;
+      newPos.y -= 10;
       gondola->setTargetPosition(newPos, speed);
       m_State = STATE_MOVE_AND_MEAS;
       m_NextState = STATE_DIR_YN;
@@ -152,15 +160,16 @@ void ApplicationRSSIMeasServer::loop()
       {
         // rewert step
         Coordinate newPos(gondola->getCurrentPosition());
-        newPos.y -= 20;
+        newPos.y -= 10;
         gondola->setTargetPosition(newPos, speed);
         m_State = STATE_MOVE_AND_MEAS;
-        m_NextState = STATE_FIN;
+        m_NextState = STATE_WAIT;
+        m_NextStart = millis() + 10000;
         m_LastMeasurement[0] = m_LastMeasurement[1] = 0x80000000;
         break;
       }
       Coordinate newPos(gondola->getCurrentPosition());
-      newPos.y += 20;
+      newPos.y += 10;
       gondola->setTargetPosition(newPos, speed);
       m_State = STATE_MOVE_AND_MEAS;
       m_NextState = STATE_DIR_YP;
@@ -176,6 +185,15 @@ void ApplicationRSSIMeasServer::loop()
       initiateMeasurement();
       break;
     }
+
+    case STATE_WAIT:
+        if (millis() > m_NextStart)
+        {
+          m_LastMeasurement[0] = m_LastMeasurement[1] = 0x80000000;
+          m_State = STATE_MOVE_AND_MEAS;
+          m_NextState = STATE_DIR_YN;
+        }
+      break;
 
     default:
       break;
@@ -195,7 +213,6 @@ void ApplicationRSSIMeasServer::webSocketEvent(uint8_t num, WStype_t type, uint8
     logDebug("[APP RSSIMeas][%u] Disconnected!\n", num);
     RSSIClientData_t *clientData = getClientData(num);
     clientData->connected = false;
-    m_State = STATE_CONNECT;
     break;
   }
 
@@ -343,4 +360,17 @@ void ApplicationRSSIMeasServer::initiateMeasurement()
 {
   uint8_t data[1] = {RSSI_MEAS_S_MEAS_CMD};
   m_WebSocketServer.broadcastBIN(data, 1);
+}
+
+bool ApplicationRSSIMeasServer::appStartCommand(std::string &s)
+{
+  m_State = STATE_START;
+  m_LastMeasurement[0] = m_LastMeasurement[1] = 0x80000000;
+  return true;
+}
+
+bool ApplicationRSSIMeasServer::appStopCommand(std::string &s)
+{
+  m_State = STATE_INIT;
+  return true;
 }
