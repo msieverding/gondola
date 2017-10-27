@@ -38,7 +38,7 @@ DistX = - MeasX(:) + OffsetX;
 DistY = MeasY(:) - OffsetY;
 ErrX = DistX(:) - X(:);
 ErrY = DistY(:) - Y(:);
-
+ErrEuclid = sqrt(ErrX.^2 + ErrY.^2);
 %% Clear temporary variables
 clearvars data raw;
 
@@ -70,6 +70,7 @@ DistXOld = - MeasXOld(:) + OffsetX;
 DistYOld = MeasYOld(:) - OffsetY;
 ErrXOld = DistXOld(:) - X(:);
 ErrYOld = DistYOld(:) - Y(:);
+ErrEuclidOld = sqrt(ErrXOld.^2 + ErrYOld.^2);
 
 
 %% Heatmap
@@ -90,4 +91,19 @@ xlim([0 3236]);
 ylim([0 2364]);
 xlabel("Y Direction [mm]");
 ylabel("X Direction [mm]");
+
+
+%% Euclidean error system - compared
+f = figure;
+set(f, 'Units', 'normalized', 'Position', [0.2, 0.2, 0.6, 0.4]); 
+hold on;
+h = plot(ErrEuclid, 'gx');
+set(h, 'linewidth', 1.5);
+h = plot(ErrEuclidOld, 'rx');
+set(h, 'linewidth', 1.5);
+grid on;
+title("Eucliden error in 2D");
+xlabel("Measurement [mm]");
+ylabel("Euclidean error [mm]");
+legend("With correction", "Without correction", 'Location' ,'best');
 

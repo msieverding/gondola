@@ -38,6 +38,7 @@ DistX = - MeasX(:) + OffsetX;
 DistY = MeasY(:) - OffsetY;
 ErrX = DistX(:) - X(:);
 ErrY = DistY(:) - Y(:);
+EuclidErr = sqrt(ErrX.^2+ErrY.^2);
 
 %% Clear temporary variables
 clearvars data raw;
@@ -110,3 +111,15 @@ xlabel("Spooled distance from calibration point [mm]");
 ylabel("Error [mm]");
 legend("Motor 1", "Motor 2", 'Location' ,'best');
 
+%% Eculidean Error System
+f = figure;
+ylim([-40 40]);
+set(f, 'Units', 'normalized', 'Position', [0.2, 0.2, 0.6, 0.4]); 
+hold on;
+h = plot(EuclidErr, 'rx');
+set(h, 'linewidth', 1.5);
+grid on;
+title("Eucliden error in 2D");
+xlabel("Measurement [mm]");
+ylabel("Euclidean error [mm]");
+legend("Euclidean error", 'Location' ,'best');

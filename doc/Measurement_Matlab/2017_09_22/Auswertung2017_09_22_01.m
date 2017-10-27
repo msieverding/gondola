@@ -147,7 +147,3 @@ title("Quadratic polynomal fit of error with rope on spool");
 xlabel("Rope on spool [mm]");
 ylabel("Error [mm]");
 legend("error", "used err measurements", "estimation of error", 'Location' ,'best');
-
-
-
-

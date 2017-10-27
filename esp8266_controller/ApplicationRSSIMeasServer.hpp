@@ -8,6 +8,8 @@
 #include "Gondola.hpp"
 // TODO Doc
 
+#define SAMPLE_WALK_GRID_SIZE     5
+
 typedef enum : byte {
   RSSI_MEAS_C_REG,
   RSSI_MEAS_C_MEAS,
@@ -81,7 +83,7 @@ private:
   rssiMeasRandomWalkState_t       m_NextRandomWalkState;
 
   // SampleWalk
-  int32_t                         m_SampleWalkMeasurements[3];
+  int32_t                         m_SampleWalkMeasurements[SAMPLE_WALK_GRID_SIZE];
   uint8_t                         m_SampleWalkSample;
   rssiMeasSampleWalkState_t       m_SampleWalkState;
   rssiMeasSampleWalkState_t       m_NextSampleWalkState;

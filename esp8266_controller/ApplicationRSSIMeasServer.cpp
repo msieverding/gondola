@@ -8,6 +8,8 @@
 #define MEASUREMENT_INTERVALL     1000
 #define PING_INTERVALL            1000
 
+
+
 ApplicationRSSIMeasServer::ApplicationRSSIMeasServer(uint16_t port)
  : m_Port(port)
  , m_WebSocketServer(m_Port)
@@ -399,8 +401,8 @@ void ApplicationRSSIMeasServer::randomWalk(Gondola *gondola, float speed)
 
 void ApplicationRSSIMeasServer::sampleWalk(Gondola *gondola, float speed)
 {
-  static Coordinate targetPos[3] = {{40, 50, 0}, {40, 150, 0}, {40, 250, 0}};
-  static Coordinate secondGrid[3] = {{0, -25, 0}, {0, 0, 0}, {0, 25, 0}};
+  static Coordinate targetPos[SAMPLE_WALK_GRID_SIZE] = {{40, 50, 0}, {40, 100, 0}, {40, 150, 0}, {40, 200, 0}, {40, 250, 0}};
+  static Coordinate secondGrid[SAMPLE_WALK_GRID_SIZE] = {{0, -25, 0}, {0, -10, 0}, {0, 0, 0}, {0, 10, 0}, {0, 25, 0}};
   static Coordinate bestCoord;
 
   switch(m_SampleWalkState)
@@ -409,7 +411,7 @@ void ApplicationRSSIMeasServer::sampleWalk(Gondola *gondola, float speed)
       gondola->setTargetPosition(targetPos[m_SampleWalkSample], speed);
 
       m_SampleWalkState = STATE_SAMPLE_MOVE_AND_MEAS;
-      if (m_SampleWalkSample == 2)
+      if (m_SampleWalkSample == SAMPLE_WALK_GRID_SIZE - 1)
         m_NextSampleWalkState = STATE_SAMPLE_EVA_1;
       else
         m_NextSampleWalkState = STATE_SAMPLE1;
@@ -418,16 +420,22 @@ void ApplicationRSSIMeasServer::sampleWalk(Gondola *gondola, float speed)
     case STATE_SAMPLE_EVA_1:
       {
         // calc best measurement
-        int32_t min = std::max(m_SampleWalkMeasurements[0], m_SampleWalkMeasurements[1]);
-        min = std::max(min, m_SampleWalkMeasurements[2]);
+        uint8_t i;
+        int32_t max = m_SampleWalkMeasurements[0];
+        for (i = 1; i < SAMPLE_WALK_GRID_SIZE; i++)
+        {
+          max = std::max(max, m_SampleWalkMeasurements[i]);
+        }
 
-        // save index
-        if (m_SampleWalkMeasurements[0] == min)
-          bestCoord = targetPos[0];
-        if (m_SampleWalkMeasurements[1] == min)
-          bestCoord = targetPos[1];
-        if (m_SampleWalkMeasurements[2] == min)
-          bestCoord = targetPos[2];
+        // catch index
+        for (uint8_t i = 0; i < SAMPLE_WALK_GRID_SIZE; i++)
+        {
+          if (m_SampleWalkMeasurements[i] == max)
+          {
+            bestCoord = targetPos[i];
+            break;
+          }
+        }
 
         m_SampleWalkSample = 0;
         m_SampleWalkState = STATE_SAMPLE2;
@@ -441,7 +449,7 @@ void ApplicationRSSIMeasServer::sampleWalk(Gondola *gondola, float speed)
         gondola->setTargetPosition(targetPos2, speed);
 
         m_SampleWalkState = STATE_SAMPLE_MOVE_AND_MEAS;
-        if (m_SampleWalkSample == 2)
+        if (m_SampleWalkSample == SAMPLE_WALK_GRID_SIZE - 1)
           m_NextSampleWalkState = STATE_SAMPLE_EVA_2;
         else
           m_NextSampleWalkState = STATE_SAMPLE2;
@@ -451,16 +459,22 @@ void ApplicationRSSIMeasServer::sampleWalk(Gondola *gondola, float speed)
     case STATE_SAMPLE_EVA_2:
       {
         // calc best measurement
-        int32_t min = std::max(m_SampleWalkMeasurements[0], m_SampleWalkMeasurements[1]);
-        min = std::max(min, m_SampleWalkMeasurements[2]);
+        uint8_t i;
+        int32_t max = m_SampleWalkMeasurements[0];
+        for (i = 1; i < SAMPLE_WALK_GRID_SIZE - 1; i++)
+        {
+          max = std::max(max, m_SampleWalkMeasurements[i]);
+        }
 
-        // save index
-        if (m_SampleWalkMeasurements[0] == min)
-          bestCoord = bestCoord + secondGrid[0];
-        if (m_SampleWalkMeasurements[1] == min)
-          bestCoord = bestCoord + secondGrid[1];
-        if (m_SampleWalkMeasurements[2] == min)
-          bestCoord = bestCoord + secondGrid[2];
+        // catch index
+        for (uint8_t i = 0; i < SAMPLE_WALK_GRID_SIZE; i++)
+        {
+          if (m_SampleWalkMeasurements[i] == max)
+          {
+            bestCoord = bestCoord + secondGrid[i];
+            break;
+          }
+        }
 
         gondola->setTargetPosition(bestCoord, speed);
 

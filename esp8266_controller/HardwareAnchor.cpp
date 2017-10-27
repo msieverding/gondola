@@ -5,7 +5,7 @@ HardwareAnchor *s_MoveInstance = NULL;
 
 HardwareAnchor::HardwareAnchor(uint8_t id)
  : IAnchor(id, Config::get()->getGO_ANCHORPOS(), 0.0f , 0.0f, Config::get()->getGO_ROPEOFFSET())
- , m_Pins({0, 5, 4})
+ , m_Pins({13, 14, 12})
  , m_StepsTodo(0)
  , m_StepsDone(0)
  , m_Direction(1)

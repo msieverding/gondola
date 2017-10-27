@@ -6,7 +6,7 @@
 <setting alwaysvectorfont="no"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="1" unitdist="mil" unit="mil" style="lines" multiple="1" display="yes" altdistance="3.93700787" altunitdist="mil" altunit="mil"/>
+<grid distance="1" unitdist="mil" unit="mm" style="lines" multiple="1" display="yes" altdistance="0.0999999999" altunitdist="mm" altunit="mm"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="yes" active="yes"/>
 <layer number="2" name="Route2" color="1" fill="3" visible="no" active="no"/>
@@ -861,7 +861,7 @@ diameter 2.54 mm, horizontal, grid 10.16 mm</description>
 <attribute name="OC_FARNELL" value="unknown" x="49.883059375" y="38.1508" size="1.778" layer="27" display="off"/>
 <attribute name="OC_NEWARK" value="10R0934" x="49.883059375" y="38.1508" size="1.778" layer="27" display="off"/>
 </element>
-<element name="U$3" library="MS" package="ROHM_BP5293-XX" value="ROHM_BP5293-XX" x="52.696" y="27.388" rot="R180"/>
+<element name="U1" library="MS" package="ROHM_BP5293-XX" value="ROHM_BP5293-XX" x="52.696" y="27.388" rot="R180"/>
 <element name="LED3_5V" library="led" library_urn="urn:adsk.eagle:library:259" package="CHIP-LED0805" package3d_urn="urn:adsk.eagle:package:15818/1" value="" x="55.88" y="6.604" smashed="yes" rot="MR180">
 <attribute name="VALUE" x="58.42" y="7.874" size="1.27" layer="28" rot="MR270"/>
 </element>
@@ -883,7 +883,7 @@ diameter 2.54 mm, horizontal, grid 10.16 mm</description>
 <contactref element="C1" pad="-"/>
 <contactref element="U$1" pad="GND@0"/>
 <contactref element="U$2" pad="1_GND"/>
-<contactref element="U$3" pad="GND"/>
+<contactref element="U1" pad="GND"/>
 <contactref element="U$2" pad="10_GND"/>
 <contactref element="D1" pad="A"/>
 <contactref element="LED1_12IN" pad="C"/>
@@ -908,8 +908,8 @@ diameter 2.54 mm, horizontal, grid 10.16 mm</description>
 <vertex x="79" y="25"/>
 <vertex x="79" y="44"/>
 </polygon>
+<contactref element="U$4" pad="2"/>
 <contactref element="U$4" pad="1"/>
-<contactref element="U$4" pad="3"/>
 </signal>
 <signal name="MS1">
 <contactref element="R7" pad="1"/>
@@ -930,7 +930,7 @@ diameter 2.54 mm, horizontal, grid 10.16 mm</description>
 <signal name="+12V">
 <contactref element="U$1" pad="VMOT"/>
 <contactref element="C1" pad="+"/>
-<contactref element="U$3" pad="VIN"/>
+<contactref element="U1" pad="VIN"/>
 <contactref element="D1" pad="C"/>
 <contactref element="R2" pad="2"/>
 <contactref element="F1" pad="P$2"/>
@@ -1041,7 +1041,7 @@ diameter 2.54 mm, horizontal, grid 10.16 mm</description>
 <wire x1="61.214" y1="20.32" x2="58.42" y2="23.114" width="0.1524" layer="16"/>
 </signal>
 <signal name="+5V">
-<contactref element="U$3" pad="VOUT"/>
+<contactref element="U1" pad="VOUT"/>
 <contactref element="U$2" pad="9_VBAT"/>
 <contactref element="R3" pad="2"/>
 <wire x1="50.156" y1="29.928" x2="50.336" y2="29.928" width="0.508" layer="16"/>
@@ -1066,12 +1066,12 @@ diameter 2.54 mm, horizontal, grid 10.16 mm</description>
 <signal name="SW_BUT">
 <contactref element="U$2" pad="7_GPIO4"/>
 <contactref element="U$4" pad="4"/>
-<contactref element="U$4" pad="2"/>
-<wire x1="47.7216" y1="1.803" x2="43.9216" y2="1.803" width="0.1524" layer="16"/>
 <wire x1="66.04" y1="2.794" x2="66.04" y2="1.8796" width="0.1524" layer="16"/>
 <wire x1="66.04" y1="1.8796" x2="65.405" y2="1.2446" width="0.1524" layer="16"/>
 <wire x1="65.405" y1="1.2446" x2="48.28" y2="1.2446" width="0.1524" layer="16"/>
-<wire x1="48.28" y1="1.2446" x2="47.7216" y2="1.803" width="0.1524" layer="16"/>
+<wire x1="47.7216" y1="1.803" x2="48.28" y2="1.2446" width="0.1524" layer="16"/>
+<contactref element="U$4" pad="3"/>
+<wire x1="47.7216" y1="8.103" x2="47.7216" y2="1.803" width="0.1524" layer="16"/>
 </signal>
 <signal name="N$1">
 <contactref element="R2" pad="1"/>

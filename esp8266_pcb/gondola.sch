@@ -6,7 +6,7 @@
 <setting alwaysvectorfont="no"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="yes" altdistance="0.01" altunitdist="inch" altunit="inch"/>
+<grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="no" altdistance="0.01" altunitdist="inch" altunit="inch"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="no" active="no"/>
 <layer number="2" name="Route2" color="1" fill="3" visible="no" active="no"/>
@@ -9920,8 +9920,8 @@ diameter 5 mm, grid 2.54 mm</description>
 </symbol>
 <symbol name="FSMCTTR">
 <pin name="4" x="5.08" y="0" length="short" rot="R180"/>
-<pin name="3" x="-5.08" y="0" length="short"/>
-<pin name="2" x="5.08" y="2.54" length="short" rot="R180"/>
+<pin name="2" x="-5.08" y="0" length="short"/>
+<pin name="3" x="5.08" y="2.54" length="short" rot="R180"/>
 <pin name="1" x="-5.08" y="2.54" length="short"/>
 <wire x1="-2.54" y1="0" x2="-2.54" y2="2.54" width="0.254" layer="94"/>
 <wire x1="2.54" y1="2.54" x2="2.54" y2="0" width="0.254" layer="94"/>
@@ -10013,8 +10013,8 @@ diameter 5 mm, grid 2.54 mm</description>
 <device name="" package="FSMCTTR">
 <connects>
 <connect gate="G$1" pin="1" pad="1"/>
-<connect gate="G$1" pin="2" pad="2"/>
-<connect gate="G$1" pin="3" pad="3"/>
+<connect gate="G$1" pin="2" pad="3"/>
+<connect gate="G$1" pin="3" pad="2"/>
 <connect gate="G$1" pin="4" pad="4"/>
 </connects>
 <technologies>
@@ -10377,7 +10377,7 @@ general purpose rectifier, 1 A</description>
 <part name="X2" library="con-phoenix-350" library_urn="urn:adsk.eagle:library:174" deviceset="1751264" device="" package3d_urn="urn:adsk.eagle:package:9397/1"/>
 <part name="GND4" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="P+2" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+12V" device=""/>
-<part name="U$3" library="MS" deviceset="ROHM_BP5293-XX" device=""/>
+<part name="U1" library="MS" deviceset="ROHM_BP5293-XX" device=""/>
 <part name="P+3" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+5V" device=""/>
 <part name="P+4" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+5V" device=""/>
 <part name="GND6" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
@@ -10393,6 +10393,7 @@ general purpose rectifier, 1 A</description>
 <plain>
 <text x="40.64" y="27.94" size="1.778" layer="94">Don't use 0, 2 and 15</text>
 <text x="2.54" y="20.32" size="1.778" layer="94">VIN comes from FTDI cable</text>
+<text x="17.78" y="-101.6" size="1.778" layer="94">Change Fuse to 1.5A</text>
 </plain>
 <instances>
 <instance part="U$1" gate="G$1" x="55.88" y="-33.02"/>
@@ -10428,7 +10429,7 @@ general purpose rectifier, 1 A</description>
 <instance part="X2" gate="-4" x="116.84" y="-35.56"/>
 <instance part="GND4" gate="1" x="58.42" y="2.54"/>
 <instance part="P+2" gate="1" x="109.22" y="-83.82"/>
-<instance part="U$3" gate="G$1" x="66.04" y="-104.14"/>
+<instance part="U1" gate="G$1" x="66.04" y="-104.14"/>
 <instance part="P+3" gate="1" x="53.34" y="-83.82"/>
 <instance part="P+4" gate="1" x="-27.94" y="45.72"/>
 <instance part="GND6" gate="1" x="5.08" y="2.54"/>
@@ -10467,7 +10468,7 @@ general purpose rectifier, 1 A</description>
 <segment>
 <pinref part="GND1" gate="1" pin="GND"/>
 <wire x1="45.72" y1="-111.76" x2="45.72" y2="-119.38" width="0.1524" layer="91"/>
-<pinref part="U$3" gate="G$1" pin="GND"/>
+<pinref part="U1" gate="G$1" pin="GND"/>
 <wire x1="35.56" y1="-111.76" x2="45.72" y2="-111.76" width="0.1524" layer="91"/>
 <wire x1="55.88" y1="-106.68" x2="45.72" y2="-106.68" width="0.1524" layer="91"/>
 <wire x1="45.72" y1="-106.68" x2="45.72" y2="-111.76" width="0.1524" layer="91"/>
@@ -10511,11 +10512,11 @@ general purpose rectifier, 1 A</description>
 <pinref part="LED5_SW" gate="G$1" pin="C"/>
 <wire x1="139.7" y1="-119.38" x2="139.7" y2="-127" width="0.1524" layer="91"/>
 <junction x="139.7" y="-127"/>
+<pinref part="U$4" gate="G$1" pin="2"/>
 <wire x1="152.4" y1="-104.14" x2="152.4" y2="-127" width="0.1524" layer="91"/>
 <junction x="152.4" y="-127"/>
 <pinref part="U$4" gate="G$1" pin="1"/>
 <wire x1="149.86" y1="-104.14" x2="152.4" y2="-104.14" width="0.1524" layer="91"/>
-<pinref part="U$4" gate="G$1" pin="3"/>
 <junction x="152.4" y="-104.14"/>
 </segment>
 </net>
@@ -10554,7 +10555,7 @@ general purpose rectifier, 1 A</description>
 <wire x1="30.48" y1="-104.14" x2="35.56" y2="-104.14" width="0.1524" layer="91"/>
 <wire x1="35.56" y1="-104.14" x2="45.72" y2="-104.14" width="0.1524" layer="91"/>
 <wire x1="45.72" y1="-104.14" x2="45.72" y2="-86.36" width="0.1524" layer="91"/>
-<pinref part="U$3" gate="G$1" pin="VIN"/>
+<pinref part="U1" gate="G$1" pin="VIN"/>
 <wire x1="45.72" y1="-104.14" x2="55.88" y2="-104.14" width="0.1524" layer="91"/>
 <junction x="45.72" y="-104.14"/>
 <pinref part="D1" gate="1" pin="C"/>
@@ -10708,7 +10709,7 @@ general purpose rectifier, 1 A</description>
 </net>
 <net name="+5V" class="0">
 <segment>
-<pinref part="U$3" gate="G$1" pin="VOUT"/>
+<pinref part="U1" gate="G$1" pin="VOUT"/>
 <wire x1="55.88" y1="-109.22" x2="53.34" y2="-109.22" width="0.1524" layer="91"/>
 <wire x1="53.34" y1="-109.22" x2="53.34" y2="-86.36" width="0.1524" layer="91"/>
 <pinref part="P+3" gate="1" pin="+5V"/>
@@ -10749,7 +10750,7 @@ general purpose rectifier, 1 A</description>
 <wire x1="152.4" y1="-93.98" x2="152.4" y2="-83.82" width="0.1524" layer="91"/>
 <label x="149.86" y="-78.74" size="1.778" layer="95" rot="R270"/>
 <pinref part="U$4" gate="G$1" pin="4"/>
-<pinref part="U$4" gate="G$1" pin="2"/>
+<pinref part="U$4" gate="G$1" pin="3"/>
 <wire x1="149.86" y1="-93.98" x2="152.4" y2="-93.98" width="0.1524" layer="91"/>
 <junction x="152.4" y="-93.98"/>
 </segment>
