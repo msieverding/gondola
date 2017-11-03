@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.13"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Gondola: esp8266_controller/ApplicationRSSIMeasServer.hpp File Reference</title>
+<title>Gondola: C:/Users/Marvin/Desktop/Projektarbeit/gondola/esp8266_controller/ApplicationRSSIMeasServer.hpp File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -64,6 +64,7 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
+<a href="#define-members">Macros</a> &#124;
 <a href="#typedef-members">Typedefs</a> &#124;
 <a href="#enum-members">Enumerations</a>  </div>
   <div class="headertitle">
@@ -74,6 +75,7 @@ $(function() {
 <code>#include &lt;list&gt;</code><br />
 <code>#include &quot;<a class="el" href="_coordinate_8hpp_source.html">Coordinate.hpp</a>&quot;</code><br />
 <code>#include &quot;ESP8266WebServer.h&quot;</code><br />
+<code>#include &quot;<a class="el" href="_gondola_8hpp_source.html">Gondola.hpp</a>&quot;</code><br />
 </div>
 <p><a href="_application_r_s_s_i_meas_server_8hpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
@@ -86,10 +88,17 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_application_r_s_s_i_meas_server.html">ApplicationRSSIMeasServer</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
+Macros</h2></td></tr>
+<tr class="memitem:acdc08c5bfd1de76cb6201ffcb2144409"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_application_r_s_s_i_meas_server_8hpp.html#acdc08c5bfd1de76cb6201ffcb2144409">SAMPLE_WALK_GRID_SIZE</a>&#160;&#160;&#160;5</td></tr>
+<tr class="separator:acdc08c5bfd1de76cb6201ffcb2144409"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
-<tr class="memitem:a4c3ba4c628b91f47316c98dab9372166"><td class="memItemLeft" align="right" valign="top">typedef enum <a class="el" href="_application_r_s_s_i_meas_server_8hpp.html#adf4c4ad12de647d638f0ee7ccb72f179">rssiMeasState_e</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_application_r_s_s_i_meas_server_8hpp.html#a4c3ba4c628b91f47316c98dab9372166">rssiMeasState_t</a></td></tr>
-<tr class="separator:a4c3ba4c628b91f47316c98dab9372166"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeb9c613f77301c32511507b119c4fc78"><td class="memItemLeft" align="right" valign="top">typedef enum <a class="el" href="_application_r_s_s_i_meas_server_8hpp.html#ab68a3981c43ba6ba6b6d3240673a1722">rssiMeasRandomWalkState_e</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_application_r_s_s_i_meas_server_8hpp.html#aeb9c613f77301c32511507b119c4fc78">rssiMeasRandomWalkState_t</a></td></tr>
+<tr class="separator:aeb9c613f77301c32511507b119c4fc78"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1bf8bc308ccf5b447252a8b9aafda339"><td class="memItemLeft" align="right" valign="top">typedef enum <a class="el" href="_application_r_s_s_i_meas_server_8hpp.html#a83f6a9d48b843d401a6f838b8bd74c5c">rssiMeasSampleWalkState_e</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_application_r_s_s_i_meas_server_8hpp.html#a1bf8bc308ccf5b447252a8b9aafda339">rssiMeasSampleWalkState_t</a></td></tr>
+<tr class="separator:a1bf8bc308ccf5b447252a8b9aafda339"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 Enumerations</h2></td></tr>
@@ -98,34 +107,81 @@ Enumerations</h2></td></tr>
 <a class="el" href="_application_r_s_s_i_meas_server_8hpp.html#abbfdf6c0b1336a23485ab9320f998a1fa2ada9a87877f38af70c0b4e4fa226e33">RSSI_MEAS_S_MEAS_CMD</a>
  }</td></tr>
 <tr class="separator:abbfdf6c0b1336a23485ab9320f998a1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adf4c4ad12de647d638f0ee7ccb72f179"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_application_r_s_s_i_meas_server_8hpp.html#adf4c4ad12de647d638f0ee7ccb72f179">rssiMeasState_e</a> : byte { <br />
-&#160;&#160;<a class="el" href="_application_r_s_s_i_meas_server_8hpp.html#adf4c4ad12de647d638f0ee7ccb72f179a70fdd77059b80d85db31026d9df64cb2">STATE_CONNECT</a>, 
-<a class="el" href="_application_r_s_s_i_meas_server_8hpp.html#adf4c4ad12de647d638f0ee7ccb72f179a98d2a2153b4ae0445fa0b114d65b94d9">STATE_INIT</a>, 
-<a class="el" href="_application_r_s_s_i_meas_server_8hpp.html#adf4c4ad12de647d638f0ee7ccb72f179a215609b23f5dd6fb29ae2c203c6541a6">STATE_DIR_ZN</a>, 
-<a class="el" href="_application_r_s_s_i_meas_server_8hpp.html#adf4c4ad12de647d638f0ee7ccb72f179a50c905d9ab5f75eb5d9e92d9d8ecfe3b">STATE_DIR_ZP</a>, 
+<tr class="memitem:ab68a3981c43ba6ba6b6d3240673a1722"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_application_r_s_s_i_meas_server_8hpp.html#ab68a3981c43ba6ba6b6d3240673a1722">rssiMeasRandomWalkState_e</a> : byte { <br />
+&#160;&#160;<a class="el" href="_application_r_s_s_i_meas_server_8hpp.html#ab68a3981c43ba6ba6b6d3240673a1722a98d2a2153b4ae0445fa0b114d65b94d9">STATE_INIT</a>, 
+<a class="el" href="_application_r_s_s_i_meas_server_8hpp.html#ab68a3981c43ba6ba6b6d3240673a1722a1844f314039d713261df43a309145446">STATE_START</a>, 
+<a class="el" href="_application_r_s_s_i_meas_server_8hpp.html#ab68a3981c43ba6ba6b6d3240673a1722a215609b23f5dd6fb29ae2c203c6541a6">STATE_DIR_ZN</a>, 
+<a class="el" href="_application_r_s_s_i_meas_server_8hpp.html#ab68a3981c43ba6ba6b6d3240673a1722a50c905d9ab5f75eb5d9e92d9d8ecfe3b">STATE_DIR_ZP</a>, 
 <br />
-&#160;&#160;<a class="el" href="_application_r_s_s_i_meas_server_8hpp.html#adf4c4ad12de647d638f0ee7ccb72f179a2320f56b7ec4084a193079b8822258ff">STATE_DIR_YN</a>, 
-<a class="el" href="_application_r_s_s_i_meas_server_8hpp.html#adf4c4ad12de647d638f0ee7ccb72f179aba83eb6691b7875dccabd543a32ae29f">STATE_DIR_YP</a>, 
-<a class="el" href="_application_r_s_s_i_meas_server_8hpp.html#adf4c4ad12de647d638f0ee7ccb72f179a7f282c9e016a6cd0616c7dc9c5ce6018">STATE_FIN</a>, 
-<a class="el" href="_application_r_s_s_i_meas_server_8hpp.html#adf4c4ad12de647d638f0ee7ccb72f179a23440620d0136b07eac29207cd6a0b67">STATE_MOVE_AND_MEAS</a>, 
+&#160;&#160;<a class="el" href="_application_r_s_s_i_meas_server_8hpp.html#ab68a3981c43ba6ba6b6d3240673a1722a2320f56b7ec4084a193079b8822258ff">STATE_DIR_YN</a>, 
+<a class="el" href="_application_r_s_s_i_meas_server_8hpp.html#ab68a3981c43ba6ba6b6d3240673a1722aba83eb6691b7875dccabd543a32ae29f">STATE_DIR_YP</a>, 
+<a class="el" href="_application_r_s_s_i_meas_server_8hpp.html#ab68a3981c43ba6ba6b6d3240673a1722a66d8f16a4988ddb948cc00bcdefafbb8">STATE_WAIT</a>, 
+<a class="el" href="_application_r_s_s_i_meas_server_8hpp.html#ab68a3981c43ba6ba6b6d3240673a1722a23440620d0136b07eac29207cd6a0b67">STATE_MOVE_AND_MEAS</a>, 
 <br />
-&#160;&#160;<a class="el" href="_application_r_s_s_i_meas_server_8hpp.html#adf4c4ad12de647d638f0ee7ccb72f179ab0d6c948f41041211fa95ad08e209132">STATE_MEAS</a>
+&#160;&#160;<a class="el" href="_application_r_s_s_i_meas_server_8hpp.html#ab68a3981c43ba6ba6b6d3240673a1722ab0d6c948f41041211fa95ad08e209132">STATE_MEAS</a>
 <br />
  }</td></tr>
-<tr class="separator:adf4c4ad12de647d638f0ee7ccb72f179"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:ab68a3981c43ba6ba6b6d3240673a1722"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a83f6a9d48b843d401a6f838b8bd74c5c"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_application_r_s_s_i_meas_server_8hpp.html#a83f6a9d48b843d401a6f838b8bd74c5c">rssiMeasSampleWalkState_e</a> : byte { <br />
+&#160;&#160;<a class="el" href="_application_r_s_s_i_meas_server_8hpp.html#a83f6a9d48b843d401a6f838b8bd74c5ca2f2b6160d1c4ac6fbb9a6ed5e262bc83">STATE_SAMPLE_INIT</a>, 
+<a class="el" href="_application_r_s_s_i_meas_server_8hpp.html#a83f6a9d48b843d401a6f838b8bd74c5ca0e0f190481b195f1911505850025d1db">STATE_SAMPLE1</a>, 
+<a class="el" href="_application_r_s_s_i_meas_server_8hpp.html#a83f6a9d48b843d401a6f838b8bd74c5cac2e90761229d524836b7a485dd4f8b40">STATE_SAMPLE_EVA_1</a>, 
+<a class="el" href="_application_r_s_s_i_meas_server_8hpp.html#a83f6a9d48b843d401a6f838b8bd74c5cabbe1b932cf8c2c9580dcac40d0dfd689">STATE_SAMPLE2</a>, 
+<br />
+&#160;&#160;<a class="el" href="_application_r_s_s_i_meas_server_8hpp.html#a83f6a9d48b843d401a6f838b8bd74c5ca888f409eb5e22ac351e3d4c1cc19e58d">STATE_SAMPLE_EVA_2</a>, 
+<a class="el" href="_application_r_s_s_i_meas_server_8hpp.html#a83f6a9d48b843d401a6f838b8bd74c5cac68983fe1e077092ef8482e680b5b026">STATE_SAMPLE_MOVE_AND_MEAS</a>, 
+<a class="el" href="_application_r_s_s_i_meas_server_8hpp.html#a83f6a9d48b843d401a6f838b8bd74c5ca9313b518c4b0aabd42882a7034c73870">STATE_SAMPLE_MEAS</a>, 
+<a class="el" href="_application_r_s_s_i_meas_server_8hpp.html#a83f6a9d48b843d401a6f838b8bd74c5ca366d056e4e2f09de35831d7449c2320c">STATE_SAMPLE_FIN</a>
+<br />
+ }</td></tr>
+<tr class="separator:a83f6a9d48b843d401a6f838b8bd74c5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Typedef Documentation</h2>
-<a id="a4c3ba4c628b91f47316c98dab9372166"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4c3ba4c628b91f47316c98dab9372166">&#9670;&nbsp;</a></span>rssiMeasState_t</h2>
+<h2 class="groupheader">Macro Definition Documentation</h2>
+<a id="acdc08c5bfd1de76cb6201ffcb2144409"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acdc08c5bfd1de76cb6201ffcb2144409">&#9670;&nbsp;</a></span>SAMPLE_WALK_GRID_SIZE</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef enum <a class="el" href="_application_r_s_s_i_meas_server_8hpp.html#adf4c4ad12de647d638f0ee7ccb72f179">rssiMeasState_e</a>  <a class="el" href="_application_r_s_s_i_meas_server_8hpp.html#a4c3ba4c628b91f47316c98dab9372166">rssiMeasState_t</a></td>
+          <td class="memname">#define SAMPLE_WALK_GRID_SIZE&#160;&#160;&#160;5</td>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Grid siz for the sample walk </p>
+
+<p class="definition">Definition at line <a class="el" href="_application_r_s_s_i_meas_server_8hpp_source.html#l00013">13</a> of file <a class="el" href="_application_r_s_s_i_meas_server_8hpp_source.html">ApplicationRSSIMeasServer.hpp</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Typedef Documentation</h2>
+<a id="aeb9c613f77301c32511507b119c4fc78"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeb9c613f77301c32511507b119c4fc78">&#9670;&nbsp;</a></span>rssiMeasRandomWalkState_t</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef enum <a class="el" href="_application_r_s_s_i_meas_server_8hpp.html#ab68a3981c43ba6ba6b6d3240673a1722">rssiMeasRandomWalkState_e</a>  <a class="el" href="_application_r_s_s_i_meas_server_8hpp.html#aeb9c613f77301c32511507b119c4fc78">rssiMeasRandomWalkState_t</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Enumeration for states in random walk algorithm </p>
+
+</div>
+</div>
+<a id="a1bf8bc308ccf5b447252a8b9aafda339"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1bf8bc308ccf5b447252a8b9aafda339">&#9670;&nbsp;</a></span>rssiMeasSampleWalkState_t</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef enum <a class="el" href="_application_r_s_s_i_meas_server_8hpp.html#a83f6a9d48b843d401a6f838b8bd74c5c">rssiMeasSampleWalkState_e</a>  <a class="el" href="_application_r_s_s_i_meas_server_8hpp.html#a1bf8bc308ccf5b447252a8b9aafda339">rssiMeasSampleWalkState_t</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Enumeration for state in sample walk algorithm </p>
 
 </div>
 </div>
@@ -141,40 +197,72 @@ Enumerations</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Enumeration for web socket commands </p>
 <table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="abbfdf6c0b1336a23485ab9320f998a1fa41a8b4e53a406215c38360eec7d88632"></a>RSSI_MEAS_C_REG&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="abbfdf6c0b1336a23485ab9320f998a1fa3234393905d43c8de065bef74be5ee79"></a>RSSI_MEAS_C_MEAS&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="abbfdf6c0b1336a23485ab9320f998a1fa2ada9a87877f38af70c0b4e4fa226e33"></a>RSSI_MEAS_S_MEAS_CMD&#160;</td><td class="fielddoc"></td></tr>
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="abbfdf6c0b1336a23485ab9320f998a1fa41a8b4e53a406215c38360eec7d88632"></a>RSSI_MEAS_C_REG&#160;</td><td class="fielddoc"><p>client registers at server </p>
+</td></tr>
+<tr><td class="fieldname"><a id="abbfdf6c0b1336a23485ab9320f998a1fa3234393905d43c8de065bef74be5ee79"></a>RSSI_MEAS_C_MEAS&#160;</td><td class="fielddoc"><p>client sends measurement to server </p>
+</td></tr>
+<tr><td class="fieldname"><a id="abbfdf6c0b1336a23485ab9320f998a1fa2ada9a87877f38af70c0b4e4fa226e33"></a>RSSI_MEAS_S_MEAS_CMD&#160;</td><td class="fielddoc"><p>server orders measurement </p>
+</td></tr>
 </table>
 
-<p class="definition">Definition at line <a class="el" href="_application_r_s_s_i_meas_server_8hpp_source.html#l00010">10</a> of file <a class="el" href="_application_r_s_s_i_meas_server_8hpp_source.html">ApplicationRSSIMeasServer.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_application_r_s_s_i_meas_server_8hpp_source.html#l00018">18</a> of file <a class="el" href="_application_r_s_s_i_meas_server_8hpp_source.html">ApplicationRSSIMeasServer.hpp</a>.</p>
 
 </div>
 </div>
-<a id="adf4c4ad12de647d638f0ee7ccb72f179"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adf4c4ad12de647d638f0ee7ccb72f179">&#9670;&nbsp;</a></span>rssiMeasState_e</h2>
+<a id="ab68a3981c43ba6ba6b6d3240673a1722"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab68a3981c43ba6ba6b6d3240673a1722">&#9670;&nbsp;</a></span>rssiMeasRandomWalkState_e</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">enum <a class="el" href="_application_r_s_s_i_meas_server_8hpp.html#adf4c4ad12de647d638f0ee7ccb72f179">rssiMeasState_e</a> : byte</td>
+          <td class="memname">enum <a class="el" href="_application_r_s_s_i_meas_server_8hpp.html#ab68a3981c43ba6ba6b6d3240673a1722">rssiMeasRandomWalkState_e</a> : byte</td>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Enumeration for states in random walk algorithm </p>
 <table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="adf4c4ad12de647d638f0ee7ccb72f179a70fdd77059b80d85db31026d9df64cb2"></a>STATE_CONNECT&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="adf4c4ad12de647d638f0ee7ccb72f179a98d2a2153b4ae0445fa0b114d65b94d9"></a>STATE_INIT&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="adf4c4ad12de647d638f0ee7ccb72f179a215609b23f5dd6fb29ae2c203c6541a6"></a>STATE_DIR_ZN&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="adf4c4ad12de647d638f0ee7ccb72f179a50c905d9ab5f75eb5d9e92d9d8ecfe3b"></a>STATE_DIR_ZP&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="adf4c4ad12de647d638f0ee7ccb72f179a2320f56b7ec4084a193079b8822258ff"></a>STATE_DIR_YN&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="adf4c4ad12de647d638f0ee7ccb72f179aba83eb6691b7875dccabd543a32ae29f"></a>STATE_DIR_YP&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="adf4c4ad12de647d638f0ee7ccb72f179a7f282c9e016a6cd0616c7dc9c5ce6018"></a>STATE_FIN&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="adf4c4ad12de647d638f0ee7ccb72f179a23440620d0136b07eac29207cd6a0b67"></a>STATE_MOVE_AND_MEAS&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="adf4c4ad12de647d638f0ee7ccb72f179ab0d6c948f41041211fa95ad08e209132"></a>STATE_MEAS&#160;</td><td class="fielddoc"></td></tr>
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="ab68a3981c43ba6ba6b6d3240673a1722a98d2a2153b4ae0445fa0b114d65b94d9"></a>STATE_INIT&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="ab68a3981c43ba6ba6b6d3240673a1722a1844f314039d713261df43a309145446"></a>STATE_START&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="ab68a3981c43ba6ba6b6d3240673a1722a215609b23f5dd6fb29ae2c203c6541a6"></a>STATE_DIR_ZN&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="ab68a3981c43ba6ba6b6d3240673a1722a50c905d9ab5f75eb5d9e92d9d8ecfe3b"></a>STATE_DIR_ZP&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="ab68a3981c43ba6ba6b6d3240673a1722a2320f56b7ec4084a193079b8822258ff"></a>STATE_DIR_YN&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="ab68a3981c43ba6ba6b6d3240673a1722aba83eb6691b7875dccabd543a32ae29f"></a>STATE_DIR_YP&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="ab68a3981c43ba6ba6b6d3240673a1722a66d8f16a4988ddb948cc00bcdefafbb8"></a>STATE_WAIT&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="ab68a3981c43ba6ba6b6d3240673a1722a23440620d0136b07eac29207cd6a0b67"></a>STATE_MOVE_AND_MEAS&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="ab68a3981c43ba6ba6b6d3240673a1722ab0d6c948f41041211fa95ad08e209132"></a>STATE_MEAS&#160;</td><td class="fielddoc"></td></tr>
 </table>
 
-<p class="definition">Definition at line <a class="el" href="_application_r_s_s_i_meas_server_8hpp_source.html#l00029">29</a> of file <a class="el" href="_application_r_s_s_i_meas_server_8hpp_source.html">ApplicationRSSIMeasServer.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_application_r_s_s_i_meas_server_8hpp_source.html#l00046">46</a> of file <a class="el" href="_application_r_s_s_i_meas_server_8hpp_source.html">ApplicationRSSIMeasServer.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a83f6a9d48b843d401a6f838b8bd74c5c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a83f6a9d48b843d401a6f838b8bd74c5c">&#9670;&nbsp;</a></span>rssiMeasSampleWalkState_e</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="_application_r_s_s_i_meas_server_8hpp.html#a83f6a9d48b843d401a6f838b8bd74c5c">rssiMeasSampleWalkState_e</a> : byte</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Enumeration for state in sample walk algorithm </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a83f6a9d48b843d401a6f838b8bd74c5ca2f2b6160d1c4ac6fbb9a6ed5e262bc83"></a>STATE_SAMPLE_INIT&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a83f6a9d48b843d401a6f838b8bd74c5ca0e0f190481b195f1911505850025d1db"></a>STATE_SAMPLE1&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a83f6a9d48b843d401a6f838b8bd74c5cac2e90761229d524836b7a485dd4f8b40"></a>STATE_SAMPLE_EVA_1&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a83f6a9d48b843d401a6f838b8bd74c5cabbe1b932cf8c2c9580dcac40d0dfd689"></a>STATE_SAMPLE2&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a83f6a9d48b843d401a6f838b8bd74c5ca888f409eb5e22ac351e3d4c1cc19e58d"></a>STATE_SAMPLE_EVA_2&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a83f6a9d48b843d401a6f838b8bd74c5cac68983fe1e077092ef8482e680b5b026"></a>STATE_SAMPLE_MOVE_AND_MEAS&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a83f6a9d48b843d401a6f838b8bd74c5ca9313b518c4b0aabd42882a7034c73870"></a>STATE_SAMPLE_MEAS&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a83f6a9d48b843d401a6f838b8bd74c5ca366d056e4e2f09de35831d7449c2320c"></a>STATE_SAMPLE_FIN&#160;</td><td class="fielddoc"></td></tr>
+</table>
+
+<p class="definition">Definition at line <a class="el" href="_application_r_s_s_i_meas_server_8hpp_source.html#l00061">61</a> of file <a class="el" href="_application_r_s_s_i_meas_server_8hpp_source.html">ApplicationRSSIMeasServer.hpp</a>.</p>
 
 </div>
 </div>

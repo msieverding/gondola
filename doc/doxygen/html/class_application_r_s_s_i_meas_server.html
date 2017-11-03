@@ -72,14 +72,15 @@ $(function() {
 Public Member Functions</h2></td></tr>
 <tr class="memitem:ab16c7f012570380163a83e3370b56c74"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_application_r_s_s_i_meas_server.html#ab16c7f012570380163a83e3370b56c74">ApplicationRSSIMeasServer</a> (uint16_t port)</td></tr>
 <tr class="separator:ab16c7f012570380163a83e3370b56c74"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a33ba1e761a9d038efd176f9133b9ce87"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_application_r_s_s_i_meas_server.html#a33ba1e761a9d038efd176f9133b9ce87">~ApplicationRSSIMeasServer</a> ()</td></tr>
+<tr class="memitem:a33ba1e761a9d038efd176f9133b9ce87"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_application_r_s_s_i_meas_server.html#a33ba1e761a9d038efd176f9133b9ce87">~ApplicationRSSIMeasServer</a> ()</td></tr>
 <tr class="separator:a33ba1e761a9d038efd176f9133b9ce87"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adba26365f367ad05f0eb6b0bcfc52cdc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_application_r_s_s_i_meas_server.html#adba26365f367ad05f0eb6b0bcfc52cdc">loop</a> ()</td></tr>
 <tr class="separator:adba26365f367ad05f0eb6b0bcfc52cdc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p class="definition">Definition at line <a class="el" href="_application_r_s_s_i_meas_server_8hpp_source.html#l00041">41</a> of file <a class="el" href="_application_r_s_s_i_meas_server_8hpp_source.html">ApplicationRSSIMeasServer.hpp</a>.</p>
+<div class="textblock"><p>Class for the server of the RSSI Measurement application </p>
+
+<p class="definition">Definition at line <a class="el" href="_application_r_s_s_i_meas_server_8hpp_source.html#l00075">75</a> of file <a class="el" href="_application_r_s_s_i_meas_server_8hpp_source.html">ApplicationRSSIMeasServer.hpp</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="ab16c7f012570380163a83e3370b56c74"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab16c7f012570380163a83e3370b56c74">&#9670;&nbsp;</a></span>ApplicationRSSIMeasServer()</h2>
@@ -96,8 +97,14 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Construcotr </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">port</td><td>port which has to be used for the web socket server </td></tr>
+  </table>
+  </dd>
+</dl>
 
-<p class="definition">Definition at line <a class="el" href="_application_r_s_s_i_meas_server_8cpp_source.html#l00011">11</a> of file <a class="el" href="_application_r_s_s_i_meas_server_8cpp_source.html">ApplicationRSSIMeasServer.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_application_r_s_s_i_meas_server_8cpp_source.html#l00013">13</a> of file <a class="el" href="_application_r_s_s_i_meas_server_8cpp_source.html">ApplicationRSSIMeasServer.cpp</a>.</p>
 
 </div>
 </div>
@@ -106,6 +113,9 @@ Public Member Functions</h2></td></tr>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">ApplicationRSSIMeasServer::~ApplicationRSSIMeasServer </td>
@@ -114,9 +124,15 @@ Public Member Functions</h2></td></tr>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
+<p>virtual destructor </p>
 
-<p class="definition">Definition at line <a class="el" href="_application_r_s_s_i_meas_server_8cpp_source.html#l00031">31</a> of file <a class="el" href="_application_r_s_s_i_meas_server_8cpp_source.html">ApplicationRSSIMeasServer.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_application_r_s_s_i_meas_server_8cpp_source.html#l00040">40</a> of file <a class="el" href="_application_r_s_s_i_meas_server_8cpp_source.html">ApplicationRSSIMeasServer.cpp</a>.</p>
 
 </div>
 </div>
@@ -135,14 +151,15 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Loop to call in systems main loop for the web socket connection </p>
 
-<p class="definition">Definition at line <a class="el" href="_application_r_s_s_i_meas_server_8cpp_source.html#l00036">36</a> of file <a class="el" href="_application_r_s_s_i_meas_server_8cpp_source.html">ApplicationRSSIMeasServer.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_application_r_s_s_i_meas_server_8cpp_source.html#l00047">47</a> of file <a class="el" href="_application_r_s_s_i_meas_server_8cpp_source.html">ApplicationRSSIMeasServer.cpp</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>esp8266_controller/<a class="el" href="_application_r_s_s_i_meas_server_8hpp_source.html">ApplicationRSSIMeasServer.hpp</a></li>
-<li>esp8266_controller/<a class="el" href="_application_r_s_s_i_meas_server_8cpp_source.html">ApplicationRSSIMeasServer.cpp</a></li>
+<li>C:/Users/Marvin/Desktop/Projektarbeit/gondola/esp8266_controller/<a class="el" href="_application_r_s_s_i_meas_server_8hpp_source.html">ApplicationRSSIMeasServer.hpp</a></li>
+<li>C:/Users/Marvin/Desktop/Projektarbeit/gondola/esp8266_controller/<a class="el" href="_application_r_s_s_i_meas_server_8cpp_source.html">ApplicationRSSIMeasServer.cpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->

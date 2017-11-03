@@ -71,7 +71,7 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:afb188e0baac345427f5286ca4d04e86c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_application_interface.html#afb188e0baac345427f5286ca4d04e86c">~ApplicationInterface</a> ()</td></tr>
+<tr class="memitem:afb188e0baac345427f5286ca4d04e86c"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_application_interface.html#afb188e0baac345427f5286ca4d04e86c">~ApplicationInterface</a> ()</td></tr>
 <tr class="separator:afb188e0baac345427f5286ca4d04e86c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2ffc8b134c3e1e3f03416254bcefe94b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_application_interface.html#a2ffc8b134c3e1e3f03416254bcefe94b">registerGondola</a> (<a class="el" href="class_gondola.html">Gondola</a> *gondola)</td></tr>
 <tr class="separator:a2ffc8b134c3e1e3f03416254bcefe94b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -84,14 +84,18 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:adf1450cbf39b7a43b2fe43b250769e01"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p class="definition">Definition at line <a class="el" href="_application_interface_8hpp_source.html#l00009">9</a> of file <a class="el" href="_application_interface_8hpp_source.html">ApplicationInterface.hpp</a>.</p>
+<div class="textblock"><p>Interface for an application. <a class="el" href="class_gondola.html">Gondola</a> will register here and any application has access to it </p>
+
+<p class="definition">Definition at line <a class="el" href="_application_interface_8hpp_source.html#l00012">12</a> of file <a class="el" href="_application_interface_8hpp_source.html">ApplicationInterface.hpp</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="afb188e0baac345427f5286ca4d04e86c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#afb188e0baac345427f5286ca4d04e86c">&#9670;&nbsp;</a></span>~ApplicationInterface()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">ApplicationInterface::~ApplicationInterface </td>
@@ -100,7 +104,13 @@ Static Public Member Functions</h2></td></tr>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
+<p>Virtual destructor </p>
 
 <p class="definition">Definition at line <a class="el" href="_application_interface_8cpp_source.html#l00019">19</a> of file <a class="el" href="_application_interface_8cpp_source.html">ApplicationInterface.cpp</a>.</p>
 
@@ -129,6 +139,7 @@ Static Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>get the instance of this interface </p><dl class="section return"><dt>Returns</dt><dd>instance of the interface </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="_application_interface_8cpp_source.html#l00005">5</a> of file <a class="el" href="_application_interface_8cpp_source.html">ApplicationInterface.cpp</a>.</p>
 
@@ -148,6 +159,7 @@ Static Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Get the regitered <a class="el" href="class_gondola.html">Gondola</a> </p><dl class="section return"><dt>Returns</dt><dd>reference to <a class="el" href="class_gondola.html">Gondola</a> </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="_application_interface_8cpp_source.html#l00030">30</a> of file <a class="el" href="_application_interface_8cpp_source.html">ApplicationInterface.cpp</a>.</p>
 
@@ -180,8 +192,8 @@ Static Public Member Functions</h2></td></tr>
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>esp8266_controller/<a class="el" href="_application_interface_8hpp_source.html">ApplicationInterface.hpp</a></li>
-<li>esp8266_controller/<a class="el" href="_application_interface_8cpp_source.html">ApplicationInterface.cpp</a></li>
+<li>C:/Users/Marvin/Desktop/Projektarbeit/gondola/esp8266_controller/<a class="el" href="_application_interface_8hpp_source.html">ApplicationInterface.hpp</a></li>
+<li>C:/Users/Marvin/Desktop/Projektarbeit/gondola/esp8266_controller/<a class="el" href="_application_interface_8cpp_source.html">ApplicationInterface.cpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->

@@ -32,7 +32,7 @@ ApplicationRSSIMeasServer::ApplicationRSSIMeasServer(uint16_t port)
   m_WebSocketServer.begin();
   m_WebSocketServer.onEvent(std::bind(&ApplicationRSSIMeasServer::webSocketEvent, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
 
-  CommandInterpreter::get()->addCommand("appPrint", std::bind(&ApplicationRSSIMeasServer::printClientData, this, std::placeholders::_1));
+  CommandInterpreter::get()->addCommand("appPrint", std::bind(&ApplicationRSSIMeasServer::appPrintCommand, this, std::placeholders::_1));
   CommandInterpreter::get()->addCommand("appStart", std::bind(&ApplicationRSSIMeasServer::appStartCommand, this, std::placeholders::_1));
   CommandInterpreter::get()->addCommand("appStop", std::bind(&ApplicationRSSIMeasServer::appStopCommand, this, std::placeholders::_1));
 }
@@ -71,6 +71,7 @@ void ApplicationRSSIMeasServer::loop()
 
   Gondola *gondola = ApplicationInterface::get()->getGondola();
 
+  // TODO find good solution to chose one of the folowing algorithms
   // randomWalk(gondola, 5.0);
   sampleWalk(gondola, 5.0);
 
@@ -173,8 +174,6 @@ void ApplicationRSSIMeasServer::webSocketEvent(uint8_t num, WStype_t type, uint8
           m_SampleWalkSample++;
           m_SampleWalkState = m_NextSampleWalkState;
         }
-
-        // ///////
         break;
       }
 
@@ -226,7 +225,7 @@ RSSIClientData_t *ApplicationRSSIMeasServer::getClientData(uint8_t* mac)
   return NULL;
 }
 
-bool ApplicationRSSIMeasServer::printClientData(std::string &s)
+bool ApplicationRSSIMeasServer::appPrintCommand(std::string &s)
 {
   std::list<RSSIClientData_t>::iterator it;
   for (it = m_ClientList.begin(); it != m_ClientList.end(); it++)
@@ -278,6 +277,7 @@ void ApplicationRSSIMeasServer::randomWalk(Gondola *gondola, float speed)
       startPos.x = 40;
       gondola->setTargetPosition(startPos, speed);
       m_RandomWalkState = STATE_MOVE_AND_MEAS;
+      // TODO use following line and delete the one below for 3D application
       // m_NextRandomWalkState = STATE_DIR_ZN;
       m_NextRandomWalkState = STATE_DIR_YN;
       break;

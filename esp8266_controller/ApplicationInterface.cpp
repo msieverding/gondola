@@ -18,7 +18,7 @@ ApplicationInterface::ApplicationInterface()
 
 ApplicationInterface::~ApplicationInterface()
 {
-
+  s_Instance = NULL;
 }
 
 

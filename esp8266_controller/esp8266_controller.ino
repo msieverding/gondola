@@ -32,7 +32,8 @@ void setup()
   wdt_enable(1000);
   // ESP.wdtEnable(1000);
 
-  RSSIServer = new ApplicationRSSIMeasServer(440);
+  // TODO Find a good solution for application settins. Maybe add EEPROM access to ApplicationInterface class
+  // RSSIServer = new ApplicationRSSIMeasServer(440);
   // RSSIClient = new ApplicationRSSIMeasClient(Config::get()->getWSO_HOST(), 440);
 }
 

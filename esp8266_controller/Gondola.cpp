@@ -91,7 +91,6 @@ void Gondola::reportAnchorFinished(uint8_t id)
     IAnchor *anchor = *it;
     if (anchor->getID() == id)
     {
-      // TODO why atomic?
       noInterrupts();
       m_UnfinishedAnchors &= ~(1 << anchor->getID());
       interrupts();

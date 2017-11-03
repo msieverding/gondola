@@ -117,10 +117,14 @@ private:
    */
   bool contypeCommand(std::string &s);
 
-  // TODO doc
+  /**
+   * Initialise the software button
+   */
   void initButton();
 
-  // TODO doc
+  /**
+   * Check button state and react on changes
+   */
   void checkButton();
 
   // Instance

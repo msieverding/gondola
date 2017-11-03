@@ -18,7 +18,9 @@ var searchData=
   ['rssi_5fmeas_5fc_5freg',['RSSI_MEAS_C_REG',['../_application_r_s_s_i_meas_server_8hpp.html#abbfdf6c0b1336a23485ab9320f998a1fa41a8b4e53a406215c38360eec7d88632',1,'ApplicationRSSIMeasServer.hpp']]],
   ['rssi_5fmeas_5fs_5fmeas_5fcmd',['RSSI_MEAS_S_MEAS_CMD',['../_application_r_s_s_i_meas_server_8hpp.html#abbfdf6c0b1336a23485ab9320f998a1fa2ada9a87877f38af70c0b4e4fa226e33',1,'ApplicationRSSIMeasServer.hpp']]],
   ['rssiclientdata_5ft',['RSSIClientData_t',['../struct_r_s_s_i_client_data__t.html',1,'']]],
-  ['rssimeasstate_5fe',['rssiMeasState_e',['../_application_r_s_s_i_meas_server_8hpp.html#adf4c4ad12de647d638f0ee7ccb72f179',1,'ApplicationRSSIMeasServer.hpp']]],
-  ['rssimeasstate_5ft',['rssiMeasState_t',['../_application_r_s_s_i_meas_server_8hpp.html#a4c3ba4c628b91f47316c98dab9372166',1,'ApplicationRSSIMeasServer.hpp']]],
+  ['rssimeasrandomwalkstate_5fe',['rssiMeasRandomWalkState_e',['../_application_r_s_s_i_meas_server_8hpp.html#ab68a3981c43ba6ba6b6d3240673a1722',1,'ApplicationRSSIMeasServer.hpp']]],
+  ['rssimeasrandomwalkstate_5ft',['rssiMeasRandomWalkState_t',['../_application_r_s_s_i_meas_server_8hpp.html#aeb9c613f77301c32511507b119c4fc78',1,'ApplicationRSSIMeasServer.hpp']]],
+  ['rssimeassamplewalkstate_5fe',['rssiMeasSampleWalkState_e',['../_application_r_s_s_i_meas_server_8hpp.html#a83f6a9d48b843d401a6f838b8bd74c5c',1,'ApplicationRSSIMeasServer.hpp']]],
+  ['rssimeassamplewalkstate_5ft',['rssiMeasSampleWalkState_t',['../_application_r_s_s_i_meas_server_8hpp.html#a1bf8bc308ccf5b447252a8b9aafda339',1,'ApplicationRSSIMeasServer.hpp']]],
   ['rssimeasurement_5ft',['RSSIMeasurement_t',['../struct_r_s_s_i_measurement__t.html',1,'']]]
 ];

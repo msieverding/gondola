@@ -71,7 +71,7 @@ void WebSocketClient::webSocketEvent(WStype_t type, uint8_t * payload, size_t le
 
 		case WStype_CONNECTED:
     {
-      // TODO find the real proble with the asynchronous mode..
+      // TODO find the real problem with the asynchronous mode..
       if (m_Connected == true)
       {
         // In asynchronous mode this could happen. Don't know why

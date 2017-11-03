@@ -71,7 +71,13 @@ public:
   */
   Coordinate getCurrentPosition();
 
-  // TODO doc
+  /**
+   * Get an estimation of the current position
+   * Start time, current time and duration are used to interpolate the current
+   * position of Gondola. The real position is not computable due to the
+   * connection delay to te anchors.
+   * @return Estimated position
+   */
   Coordinate getTimeEstimatedPosition();
 
   /**
@@ -106,7 +112,10 @@ public:
    */
   IAnchor *getAnchor(uint8_t id);
 
-  // TODO Doc
+  /**
+   * Get idle indicator of Gondola
+   * @return true if Gondola does not move
+   */
   bool isIdle();
 private:
 
