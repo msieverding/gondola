@@ -98,7 +98,7 @@ set(f, 'Units', 'normalized', 'Position', [0.2, 0.2, 0.6, 0.4]);
 hold on;
 h = plot(SpoolMotor1 - SpoolCalibrationMotor1, SpoolErrMotor1, 'rx');
 set(h, 'linewidth', 1.5);
-h = plot(SpoolMotor2 - SpoolCalibrationMotor2, SpoolErrMotor2, 'mx');
+h = plot(SpoolMotor2 - SpoolCalibrationMotor2, SpoolErrMotor2, 'bx');
 set(h, 'linewidth', 1.5);
 grid on;
 title("Spooling error");

@@ -49,7 +49,7 @@ set(f, 'Units', 'normalized', 'Position', [0.2, 0.2, 0.3, 0.4]);
 hold on;
 h = plot(Force(:,1), Extension(:,1), 'r');
 set(h, 'linewidth', 1.5);
-h = plot(Force(:,2), Extension(:,2), 'm');
+h = plot(Force(:,2), Extension(:,2), 'b');
 set(h, 'linewidth', 1.5);
 title("Error relating to tension of the rope with different initial rope length");
 xlabel("Force [N]");
